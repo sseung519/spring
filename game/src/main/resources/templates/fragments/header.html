@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    
+    <header th:fragment="header" class="header-section">
+        <div class="container">
+            <!-- logo -->
+            <a class="site-logo" href="/">
+                <img src="img/logo.png" alt="로고">
+            </a>
+            <div class="user-panel">
+                <a th:if="${session.name == null}" href="/login">로그인</a>
+                <span th:unless="${session.name == null}">
+                    <a href="/" th:text="${session.name} + '님'"></a>
+                    <a href="/logout" style="color:white;">로그아웃</a>
+                </span>
+            </div>
+            <!-- responsive -->
+            <div class="nav-switch">
+                <i class="fa fa-bars"></i>
+            </div>
+            <!-- site menu -->
+            <nav class="main-menu">
+                <ul>
+                    <li><a href="/">홈</a></li>
+                    <li><a href="/games">게임</a></li>
+                    <li><a href="/library">라이브러리</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+</html>
