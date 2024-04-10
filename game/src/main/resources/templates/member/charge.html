@@ -16,11 +16,12 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label for="charge"></label>
-                                                <input class="form-control" name="charge" id="charge"
-                                                       type="number" placeholder="잔고 충전" maxlength="250" required>원
+                                                <label for="charge">충전 금액</label>
+                                                <input class="form-control" name="charge" id="charge" type="number" placeholder="충전 금액" maxlength="250" required>
                                             </div>
-                                            <button class="btn btn-primary solid blank mt-3" type="submit" style="width:100%; background-color:black; color:white; border: 1px solid black;">잔고 충전</button>
+                                            <button class="btn btn-primary solid blank mt-3" type="submit" style="width:100%; background-color:black; color:white; border: 1px solid black;">
+                                                잔고 충전
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
@@ -31,4 +32,19 @@
             </div>
         </section>
     </main>
+
+    <!-- 각 페이지의 JS가 작성될 위치지정 -->
+    <th:block layout:fragment="script">
+    <script>
+        function submitForm() {
+            var balance = parseInt(document.getElementById('balance').value);
+            var charge = parseInt(document.getElementById('charge').value);
+            var total = balance + charge;
+
+            document.getElementById('total').value = total;
+
+            document.getElementById('contact-form').submit();
+        }
+    </script>
+    </th:block>
 </html>
