@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Game {
+public class Games {
     private int gNo;
     private String gName;
     private String gInfo;

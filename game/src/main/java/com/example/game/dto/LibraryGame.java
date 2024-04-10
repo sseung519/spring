@@ -8,6 +8,6 @@ import lombok.Setter;
 public class LibraryGame {
     private int lgNo;
 
-    private Game game;
+    private Games games;
     private Library library;
 }

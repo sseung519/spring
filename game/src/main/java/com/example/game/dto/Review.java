@@ -12,5 +12,5 @@ public class Review {
     private String rDate;
 
     private Member member;
-    private Game game;
+    private Games games;
 }
