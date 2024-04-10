@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout}">
 
-    <main layout:fragment="content" class="main">
+    <main layout:fragment="content" class="main" style="margin-bottom: 30px;">
         <section class="pt-5 padding-bottom">
             <div class="container">
                 <div class="row">
@@ -35,16 +35,5 @@
 
     <!-- 각 페이지의 JS가 작성될 위치지정 -->
     <th:block layout:fragment="script">
-    <script>
-        function submitForm() {
-            var balance = parseInt(document.getElementById('balance').value);
-            var charge = parseInt(document.getElementById('charge').value);
-            var total = balance + charge;
-
-            document.getElementById('total').value = total;
-
-            document.getElementById('contact-form').submit();
-        }
-    </script>
     </th:block>
 </html>

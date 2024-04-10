@@ -65,11 +65,11 @@ public class MemberController {
             Member member = new Member();
             member.setMemberId(memberId);
             memberService.chargeBalance(member, charge);
-            int updatedBalance = ((int) session.getAttribute("balance")) + charge;
-            session.setAttribute("balance", updatedBalance);
+            int chargeBalance = ((int) session.getAttribute("balance")) + charge;
+            session.setAttribute("balance", chargeBalance);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return "redirect:/member/charge";
+        return "member/charge";
     }
 }
