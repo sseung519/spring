@@ -13,6 +13,10 @@
     </resultMap>
 
     <select id="loginMember" resultType="Member" resultMap="Member"> <!-- 사용할 resultMap의 ID입력 -->
-        SELECT * FROM MEMBER WHERE email = #{email} AND password = #{password}
+        select * from member where email = #{email} and password = #{password}
+    </select>
+    <select id="chargeBalance" resultType="Member" resultMap="Member">
+        update member set balance = balance + ${charge}
+        where member_id = ${getMemberId}
     </select>
 </mapper>

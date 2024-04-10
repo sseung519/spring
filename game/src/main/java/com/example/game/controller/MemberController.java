@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class MemberController {
@@ -30,13 +31,14 @@ public class MemberController {
                 // .setAttribute(키, 값) -> 세션에 값을 저장
                 session.setAttribute("name", loginMember.getName());
                 session.setAttribute("member_id",loginMember.getMemberId());
+                // balance: 잔고 값 표시를 위해 값 저장
+                session.setAttribute("balance", loginMember.getBalance());
                 return "redirect:/";
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        //3. 로그인 실패시 login페이지로 이동
+        
         return "member/login";
     }
 
@@ -45,8 +47,22 @@ public class MemberController {
         //세션에 저장된 name과 memer_id 삭제
         session.removeAttribute("name");
         session.removeAttribute("member_id");
+        session.removeAttribute("balance");
 
         return "redirect:/"; // 로그아웃 성공
     }
 
+    @PostMapping(value="/charge")
+    public String chargeBalance(@RequestParam("charge") int charge, HttpSession session) {
+        try {
+            int memberId = (int) session.getAttribute("member_id");
+            Member member = new Member();
+            member.setMemberId(memberId);
+            member.setBalance(charge);
+            memberService.chargeBalance(member, charge);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return "member/charge";
+    }
 }
