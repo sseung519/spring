@@ -7,6 +7,5 @@ import lombok.Setter;
 @Setter
 public class Library {
     private int lNo;
-
     private Member member;
 }

@@ -5,7 +5,7 @@
         <div class="container">
             <!-- logo -->
             <a class="site-logo" href="/">
-                <img src="img/logo.png" alt="로고">
+                <img src="/img/logo.png" alt="로고">
             </a>
             <div class="user-panel">
                 <a th:if="${session.name == null}" href="/login">로그인</a>
@@ -26,8 +26,8 @@
                 <ul>
                     <li><a href="/">홈</a></li>
                     <li><a href="/games">게임</a></li>
-                    <li><a href="/library">라이브러리</a></li>
-                    <li><a th:if="${session.name !=null}" href="/charge">잔고 충전</a></li>
+                    <li><a th:if="${session.name != null}" href="/library">라이브러리</a></li>
+                    <li><a th:if="${session.name != null}" href="/charge">잔고 충전</a></li>
                 </ul>
             </nav>
         </div>

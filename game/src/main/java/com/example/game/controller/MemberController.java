@@ -54,15 +54,14 @@ public class MemberController {
 
 
     @GetMapping(value = "/charge")
-    public String ChargeBalance() {
+    public String chargeBalance2() {
         return "member/charge";
     }
 
     @PostMapping(value = "/charge")
-    public String chargeBalance(@RequestParam("charge") int charge, HttpSession session) {
+    public String chargeBalance(@RequestParam("charge") int charge, HttpSession session, Member member) {
         try {
             int memberId = (int) session.getAttribute("member_id");
-            Member member = new Member();
             member.setMemberId(memberId);
             memberService.chargeBalance(member, charge);
             int chargeBalance = ((int) session.getAttribute("balance")) + charge;

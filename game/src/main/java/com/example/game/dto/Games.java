@@ -11,4 +11,5 @@ public class Games {
     private String gInfo;
     private String gDate;
     private String gPrice;
+    private String img;
 }
