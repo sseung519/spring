@@ -66,6 +66,8 @@ public class MemberController {
             memberService.chargeBalance(member, charge);
             int chargeBalance = ((int) session.getAttribute("balance")) + charge;
             session.setAttribute("balance", chargeBalance);
+
+//            System.out.println(charge +"원 충전되었습니다.");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

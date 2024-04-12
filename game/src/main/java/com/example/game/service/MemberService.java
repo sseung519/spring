@@ -9,4 +9,6 @@ public interface MemberService {
 
     public void chargeBalance(Member member, int charge) throws Exception;
 
+    public void updateBalance(int memberId, int newBalance);
+
 }

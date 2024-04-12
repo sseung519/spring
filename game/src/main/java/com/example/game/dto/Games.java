@@ -12,4 +12,6 @@ public class Games {
     private String gDate;
     private String gPrice;
     private String img;
+
+    private Member member;
 }

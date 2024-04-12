@@ -11,12 +11,21 @@
         <result column="g_date" property="gDate" />
         <result column="g_price" property="gPrice" />
         <result column="img" property="img" />
-
     </resultMap>
+    <resultMap id="Member" type="Member" >
+        <result column="member_id" property="memberId" />
+        <result column="email" property="email" />
+        <result column="name" property="name" />
+        <result column="password" property="password" />
+        <result column="balance" property="balance" />
+    </resultMap>
+
     <select id="getAllGames"  resultType="Games" resultMap="Games">
         select * from game
     </select>
     <select id="getGameByNo" parameterType="int" resultType="Games" resultMap="Games">
         SELECT * FROM game WHERE g_no = #{gNo}
     </select>
+
+
 </mapper>

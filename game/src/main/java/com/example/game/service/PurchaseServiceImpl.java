@@ -14,24 +14,26 @@ import com.example.game.dto.LibraryGame;
 public class PurchaseServiceImpl implements PurchaseService {
 
     @Autowired
+    MemberService memberService;
+    @Autowired
     GamesDao gamesDao;
     // 게임 구매 메서드
     @Override
-    public boolean purchaseGame(HttpSession httpSession, int gNo, int gPrice) {
+    public boolean purchaseGame(HttpSession session, int gNo, int gPrice) {
         try {
-            // HttpSession에서 사용자의 balance 가져오기
-            int balance = (int) httpSession.getAttribute("balance");
+            int memberId = (int) session.getAttribute("member_id");
+            int balance = (int) session.getAttribute("balance");
 
-            // balance가 구매 가격 이상인지 확인
             if (balance >= gPrice) {
-                // balance를 업데이트하고 라이브러리에 게임 추가
                 balance -= gPrice;
-                httpSession.setAttribute("balance", balance);
-                addToLibrary(httpSession, gNo);
+                session.setAttribute("balance", balance);
+
+                // 사용자의 잔고를 업데이트합니다.
+                memberService.updateBalance(memberId, balance);
+
                 return true;
             }
         } catch (Exception e) {
-            // 예외 처리
             e.printStackTrace();
         }
         return false;

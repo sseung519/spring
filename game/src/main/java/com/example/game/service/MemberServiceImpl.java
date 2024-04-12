@@ -21,4 +21,9 @@ public class MemberServiceImpl implements MemberService {
     public void chargeBalance(Member member, int charge) throws Exception {
         memberDao.chargeBalance(member, charge);
     }
+
+    @Override
+    public void updateBalance(int memberId, int newBalance) {
+        memberDao.updateBalance(memberId, newBalance);
+    }
 }

@@ -1,7 +1,10 @@
 package com.example.game.controller;
 
 import com.example.game.dto.Games;
+import com.example.game.dto.Library;
+import com.example.game.dto.Member;
 import com.example.game.service.GamesService;
+import com.example.game.service.LibraryGameService;
 import com.example.game.service.MemberService;
 import com.example.game.service.PurchaseService;
 import jakarta.servlet.http.HttpSession;
@@ -21,6 +24,8 @@ public class GamesController {
     GamesService gamesService;
     @Autowired
     PurchaseService purchaseService;
+    @Autowired
+    LibraryGameService libraryGameService;
 
     @GetMapping(value = "/")
     public String index(Model model) {
@@ -51,18 +56,29 @@ public class GamesController {
         return "games/detail";
     }
     @GetMapping("/purchase/{gNo}")
-    public String purchaseGame(@PathVariable("gNo") int gNo, HttpSession httpSession, int gPrice, RedirectAttributes redirectAttributes) {
-        // 게임을 구매하고 라이브러리에 추가하는 메서드 호출
-        boolean purchaseSuccess = purchaseService.purchaseGame(httpSession, gNo, gPrice);
+    public String showPurchasePage(@PathVariable("gNo") int gNo, Model model) {
+        Games game = gamesService.getGameByNo(gNo);
+        model.addAttribute("game", game);
+        return "purchasePage";
+    }
+
+    @PostMapping("/purchase/{gNo}")
+    public String purchaseGame(@PathVariable("gNo") int gNo, HttpSession session, @RequestParam("gPrice") int gPrice, RedirectAttributes redirectAttributes) {
+        boolean purchaseSuccess = purchaseService.purchaseGame(session, gNo, gPrice);
 
         if (purchaseSuccess) {
+//            Member member = (Member) session.getAttribute("member");
+//            Games games = (Games) session.getAttribute("games");
+//            Library library = (Library) session.getAttribute("library");
+//            libraryGameService.addGameToLibrary(member, games, library);
+
             redirectAttributes.addFlashAttribute("successMessage", "게임을 구매하였습니다.");
+
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "잔액이 부족하여 게임을 구매할 수 없습니다.");
         }
 
-        // 구매 후 메인 페이지로 리다이렉트합니다.
-        return "redirect:/";
+        return "redirect:/games/" + gNo;
     }
 
 }

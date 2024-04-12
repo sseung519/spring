@@ -10,8 +10,7 @@ import java.util.List;
 public interface GamesDao {
     public List<Games> getAllGames();
     public Games getGameByNo(int gNo);
-    public boolean purchaseGame(HttpSession httpSession, int gNo, int gPrice);
-
-    public void addToLibrary(HttpSession httpSession, int gNo);
+    public boolean purchaseGame(HttpSession session, int gNo, int gPrice);
+    public void addToLibrary(HttpSession session, int gNo);
 
 }

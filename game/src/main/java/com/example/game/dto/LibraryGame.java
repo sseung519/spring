@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class LibraryGame {
     private int lgNo;
-
     private Games games;
     private Library library;
+    private Member member;
 }

@@ -41,11 +41,18 @@
                         <div class="blog-thumb set-bg" th:data-setbg="${game.img}">
                         
                         </div>
+                        <form id="purchaseForm" th:action="@{/purchase/{gNo}(gNo=${game.gNo})}" method="post">
+                            <!-- 게임 번호를 hidden 필드로 전달 -->
+                            <input type="hidden" id="gameNo" name="gNo" th:value="${game.gNo}" />
+                            <input type="hidden" name="gPrice" th:value="${game.gPrice}" />
+                            <input type="hidden" name="memberId" th:value="${memberId}" />
                         <div class="blog-content">
                             <h3 th:text="${game.gName}"></h3>
+                            <p th:text="'출시일: ' + ${game.gDate}"></p>
                             <p th:text="${game.gInfo}"></p>
                             <button th:text="${game.gPrice} + '원 구매하기'" class="btn btn-primary solid blank mt-3" type="submit" style="width:20%; background-color:black; color:white; border: 1px solid black;"></button>
                         </div>
+                        </form>
                         <div class="comment-warp">
                             <h4 class="comment-title">Top Coments</h4>
                             <ul class="comment-list">
@@ -55,7 +62,6 @@
                                         <div class="comment-content">
                                             <h5>James Smith <span>June 21, 2018</span></h5>
                                             <p>Donec venenatis at eros sit amet aliquam. Donec vel orci efficitur, dictum nisl vitae, scelerisque nibh. Curabitur eget ipsum pulvinar nunc gravida interdum. </p>
-                                            <a href="" class="reply">Reply</a>
                                         </div>
                                     </div>
                                 </li>
@@ -65,7 +71,6 @@
                                         <div class="comment-content">
                                             <h5>James Smith <span>June 21, 2018</span></h5>
                                             <p>Donec venenatis at eros sit amet aliquam. Donec vel orci efficitur, dictum nisl vitae, scelerisque nibh. Curabitur eget ipsum pulvinar nunc gravida interdum. </p>
-                                            <a href="" class="reply">Reply</a>
                                         </div>
                                     </div>
                                 </li>

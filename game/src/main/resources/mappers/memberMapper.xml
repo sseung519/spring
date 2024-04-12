@@ -19,4 +19,10 @@
         update member set balance = balance + #{charge}
         where member_id = #{member.memberId}
     </update>
+    <update id="updateBalance">
+        UPDATE member
+        SET balance = #{newBalance}
+        WHERE member_id = #{memberId}
+    </update>
+
 </mapper>
