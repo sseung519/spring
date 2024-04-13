@@ -77,19 +77,16 @@
                             </ul>
                         </div>
                         <div class="comment-form-warp">
-                            <h4 class="comment-title">Leave Your Comment</h4>
-                            <form class="comment-form">
+                            <h4 class="comment-title">리뷰를 작성해보세요.</h4>
+                            <form class="comment-form" method="post" action="/review">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <input type="text" placeholder="Name">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="email" placeholder="Email">
+                                        <p th:text="${session.name} +'님'"></p>
                                     </div>
                                     <div class="col-lg-12">
-                                        <input type="text" placeholder="Subject">
-                                        <textarea placeholder="Message"></textarea>
-                                        <button class="site-btn btn-sm">Send</button>
+                                        <input type="text" placeholder="제목을 입력하세요." name="rTitle">
+                                        <textarea placeholder="내용을 입력하세요." name="rContent"></textarea>
+                                        <button type="submit" class="site-btn btn-sm">작성</button>
                                     </div>
                                 </div>
                             </form>

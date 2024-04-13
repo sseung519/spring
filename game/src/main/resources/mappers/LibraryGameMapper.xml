@@ -26,8 +26,7 @@
         <result column="img" property="img" />
     </resultMap>
     <insert id="insertLibraryGame">
-        INSERT INTO library_game
-        VALUES (#{memberId}, #{gNo}, #{lNo})
+        insert into library_game values(library_game_seq.nextval, #{gNo}, #{libraryNo}, #{memberId})
     </insert>
 
 </mapper>

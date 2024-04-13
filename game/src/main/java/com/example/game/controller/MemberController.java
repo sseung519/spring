@@ -63,9 +63,12 @@ public class MemberController {
         try {
             int memberId = (int) session.getAttribute("member_id");
             member.setMemberId(memberId);
+            String name = (String) session.getAttribute("name");
+            member.setName(name);
             memberService.chargeBalance(member, charge);
             int chargeBalance = ((int) session.getAttribute("balance")) + charge;
             session.setAttribute("balance", chargeBalance);
+            session.setAttribute("name", name);
 
 //            System.out.println(charge +"원 충전되었습니다.");
         } catch (Exception e) {

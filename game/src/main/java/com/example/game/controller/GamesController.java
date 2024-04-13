@@ -52,7 +52,9 @@ public class GamesController {
     @GetMapping("/games/{gNo}")
     public String getGameDetail(@PathVariable("gNo") int gNo, Model model) {
         Games game = gamesService.getGameByNo(gNo);
+        Member member = new Member();
         model.addAttribute("game", game);
+        model.addAttribute("member", member);
         return "games/detail";
     }
     @GetMapping("/purchase/{gNo}")
