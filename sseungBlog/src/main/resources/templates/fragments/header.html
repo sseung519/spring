@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<header th:fragment="header" class="site-navbar pt-3" role="banner">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+
+            <div class="col-6 col-xl-6 logo">
+                <h1 class="mb-0"><a href="/" class="text-black h2 mb-0">sseung</a></h1>
+            </div>
+
+            <div class="col-6 mr-auto py-3 text-right" style="position: relative; top: 3px;">
+                <div class="social-icons d-inline">
+                    <a href="#"><span class="icon-facebook"></span></a>
+                    <a href="#"><span class="icon-twitter"></span></a>
+                    <a href="#"><span class="icon-instagram"></span></a>
+                </div>
+                <a href="#" class="site-menu-toggle js-menu-toggle text-black d-inline-block d-xl-none"><span class="icon-menu h3"></span></a></div>
+        </div>
+
+        <div class="col-12 d-none d-xl-block border-top">
+            <nav class="site-navigation text-center " role="navigation">
+
+                <ul class="site-menu js-clone-nav mx-auto d-none d-lg-block mb-0">
+                    <li class="active"><a href="/">Homepage</a></li>
+                    <li><a href="/notice">Notice</a></li>
+                    <li class="has-children">
+                        <a href="/list">Write</a>
+                        <ul class="dropdown">
+                            <li><a href="/write">포스트 작성</a></li>
+                            <li><a href="/list">포스트 목록</a></li>
+                        </ul>
+                    </li>
+                    <li class="list-inline-item">
+                        <a th:if="${session.name == null}" href="/login">Login</a>
+                        <a th:if="${session.name == null}" href="/register">Register</a>
+
+                        <span th:unless="${session.name == null}">
+                                <span th:text="${session.name} + '님 반갑습니다! '"></span>
+                                <a href="/logout">LOGOUT</a>
+                        </span>
+                    </li>
+                </ul>
+
+            </nav>
+        </div>
+    </div>
+
+    </div>
+</header>
+</html>

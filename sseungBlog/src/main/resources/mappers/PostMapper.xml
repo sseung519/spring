@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.sseungBlog.dao.PostDao">
+    <resultMap id="Member" type="Member">
+        <result column="member_id" property="memberId"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+    </resultMap>
+    <resultMap id="Category" type="Category">
+        <result column="category_code" property="categoryCode"/>
+        <result column="category_name" property="categoryName"/>
+    </resultMap>
+    <resultMap id="Post" type="Post">
+        <result column="post_id" property="postId"/>
+        <result column="subject" property="subject"/>
+        <result column="content" property="content"/>
+        <result column="member_id" property="memberId"/>
+        <result column="write_date" property="writeDate"/>
+        <result column="update_date" property="updateDate"/>
+        <result column="views" property="views"/>
+        <result column="category_code" property="categoryCode"/>
+        <collection property="category" resultMap="Category"/>
+        <collection property="member" resultMap="Member"/>
+    </resultMap>
+    <select id="getPostList" resultType="Post" parameterType="map" resultMap="Post">
+        SELECT * FROM (
+                          SELECT rownum rnum, DATA.* from (
+                                                              SELECT p.POST_ID, p.SUBJECT, p.CONTENT, p.MEMBER_ID,
+                                                                     to_char(p.WRITE_DATE,'yyyy-mm-dd') write_date,
+                                                                     to_char(p.UPDATE_DATE,'yyyy-mm-dd') update_date,
+                                                                     p.VIEWS, c.CATEGORY_CODE, c.CATEGORY_NAME
+                                                              FROM post p, CATEGORY c
+                                                              WHERE p.CATEGORY_CODE = c.CATEGORY_CODE
+                                                                AND ${searchKey} LIKE '%' || #{searchValue} || '%'
+                                                              ORDER BY p.POST_ID DESC
+                                                          ) DATA
+                      ) WHERE rnum BETWEEN #{start} AND #{end}
+    </select>
+    <select id="getDataCount" parameterType="map" resultType="int">
+        SELECT nvl(count(*),0)  FROM post
+        WHERE member_id = #{memberId}
+          AND SUBJECT LIKE '%%'
+          AND  ${searchKey} LIKE '%' ||#{searchValue} ||'%'
+    </select>
+
+    <update id="updateHitCount" parameterType="int">
+        update post set views = views + 1 where post_id = #{postId}
+    </update>
+
+    <insert id="insertPost" parameterType="Post">
+        insert into post values(post_seq.nextval, #{subject}, #{content}, #{memberId}, sysdate, sysdate, 0, #{categoryCode})
+
+    </insert>
+
+    <update id ="updatePost" parameterType="Post">
+        update post set subject = #{subject},
+                        content = #{content}, update_date = sysdate, category_code = #{categoryCode}
+        where post_id = #{postId}
+    </update>
+
+    <delete id="deletePost" parameterType="int">
+        delete post where post_id = #{postId}
+    </delete>
+
+    <select id="getReadPost" parameterType="int" resultType="Post" resultMap="Post">
+        select p.post_id, p.subject, p.content, p.member_id, p.write_date, p.update_date,
+               p.views, p.category_code, m.member_id, m.name, m.email
+        from post p, member m
+        where p.member_id = m.member_id
+          and p.post_id = #{postId}
+    </select>
+</mapper>

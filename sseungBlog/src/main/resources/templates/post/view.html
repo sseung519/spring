@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<main layout:fragment="content" class="main">
+
+
+    <section class="site-section py-lg">
+        <div class="container">
+
+            <div class="row blog-entries element-animate">
+
+                <div class="col-md-12 col-lg-8 main-content">
+
+                    <div class="post-content-body">
+                        <h2 th:text="${post.subject}"></h2>
+                        <span th:text=" 'by.' + ${post.member.name}"></span>
+                        <span th:text="${post.writeDate}"></span>
+                        <br/>
+                        <div class="entry-content" th:utext="${post.content}"></div>
+                            <div class="row mb-5 mt-5">
+                            <div class="col-md-12 mb-4">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-5">
+                        <div class="list-posts-share" th:if="${session.member_id} == ${post.memberId} or ${session.admin} == 1">
+                            <a th:onclick="|location.href='rewrite?postId=@{${post.postId}}&@{${params}}'|" style="cursor:pointer;">수정</a>
+                            <a onclick="deletePost(); return false;" style="cursor:pointer;">삭제</a>
+                        </div>
+                    </div>
+
+
+                    <div class="pt-5">
+                        <h3 class="mb-5">Comments</h3>
+                        <ul class="comment-list">
+                            <li class="comment">
+                                <div class="comment-body">
+                                    <h3>Jean Doe</h3>
+                                    <div class="meta">January 9, 2018 at 2:21pm</div>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <!-- END comment-list -->
+
+                        <div class="comment-form-wrap pt-5">
+                            <h3 class="mb-5">Leave a comment</h3>
+                            <form action="#" class="p-5 bg-light">
+                                <div th:text="${session.name}" class="form-group">
+                                    <input type="hidden" id="name" th:name="${session.name}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message">Message</label>
+                                    <textarea name="" id="message" cols="30" rows="10" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Post Comment" class="btn btn-primary">
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- END main-content -->
+
+                <div class="col-md-12 col-lg-4 sidebar">
+                    <div class="sidebar-box search-form-wrap">
+                        <form action="#" class="search-form">
+                            <div class="form-group">
+                                <span class="icon fa fa-search"></span>
+                                <input type="text" class="form-control" id="s" placeholder="Type a keyword and hit enter">
+                            </div>
+                        </form>
+                    </div>
+                    <!-- END sidebar-box -->
+                    <div class="sidebar-box">
+                        <div class="bio text-center">
+                            <img src="images/person_2.jpg" alt="Image Placeholder" class="img-fluid mb-5">
+                            <div class="bio-body">
+                                <h2 th:text="${post.member.name}"></h2>
+                                <p class="mb-4"></p>
+                                <p><a href="#" class="btn btn-primary btn-sm rounded px-4 py-2">Read my bio</a></p>
+                                <p class="social">
+                                    <a href="#" class="p-2"><span class="fa fa-facebook"></span></a>
+                                    <a href="#" class="p-2"><span class="fa fa-twitter"></span></a>
+                                    <a href="#" class="p-2"><span class="fa fa-instagram"></span></a>
+                                    <a href="#" class="p-2"><span class="fa fa-youtube-play"></span></a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END sidebar-box -->
+                    <div class="sidebar-box">
+                        <h3 class="heading">Popular Posts</h3>
+                        <div class="post-entry-sidebar">
+                            <ul>
+                                <li>
+                                    <a href="">
+                                        <img src="images/img_1.jpg" alt="Image placeholder" class="mr-4">
+                                        <div class="text">
+                                            <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
+                                            <div class="post-meta">
+                                                <span class="mr-2">March 15, 2018 </span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <img src="images/img_2.jpg" alt="Image placeholder" class="mr-4">
+                                        <div class="text">
+                                            <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
+                                            <div class="post-meta">
+                                                <span class="mr-2">March 15, 2018 </span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <img src="images/img_3.jpg" alt="Image placeholder" class="mr-4">
+                                        <div class="text">
+                                            <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
+                                            <div class="post-meta">
+                                                <span class="mr-2">March 15, 2018 </span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END sidebar-box -->
+
+                    <div class="sidebar-box">
+                        <h3 class="heading">Categories</h3>
+                        <ul class="categories">
+                            <li><a href="#">Food <span>(12)</span></a></li>
+                            <li><a href="#">Travel <span>(22)</span></a></li>
+                            <li><a href="#">Lifestyle <span>(37)</span></a></li>
+                            <li><a href="#">Business <span>(42)</span></a></li>
+                            <li><a href="#">Adventure <span>(14)</span></a></li>
+                        </ul>
+                    </div>
+                    <!-- END sidebar-box -->
+
+                    <div class="sidebar-box">
+                        <h3 class="heading">Tags</h3>
+                        <ul class="tags">
+                            <li><a href="#">Travel</a></li>
+                            <li><a href="#">Adventure</a></li>
+                            <li><a href="#">Food</a></li>
+                            <li><a href="#">Lifestyle</a></li>
+                            <li><a href="#">Business</a></li>
+                            <li><a href="#">Freelancing</a></li>
+                            <li><a href="#">Travel</a></li>
+                            <li><a href="#">Adventure</a></li>
+                            <li><a href="#">Food</a></li>
+                            <li><a href="#">Lifestyle</a></li>
+                            <li><a href="#">Business</a></li>
+                            <li><a href="#">Freelancing</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- END sidebar -->
+
+            </div>
+        </div>
+    </section>
+</main>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        function deletePost() {
+            const result = confirm("해당 포스트 삭제하시겠습니까?");
+            const url = '/delete/' + [[${post.postId}]]; // request URL
+
+            if(result) {
+                $.ajax({
+                    url : url,
+                    type : "DELETE", // 전송방식
+                    contentType : "application/json",
+                    dataType : "json",
+                    cache : false,
+                    success : function(result, status) {
+                        console.log("result postId: " + result + ", statusCode: " + status);
+                        location.href = '/list';
+                    },
+                    error : function(jqXHR, status, error) {
+                        console.log("result: " + jqXHR.responseText + ", statusCode: " + status);
+
+                        //삭제 권한이 없거나 로그인이 풀리면 로그인 페이지로 이동
+                        if(jqXHR.status == '401') { //UNAUTHORIZED
+                            location.href = '/login';
+                        } else {
+                            alert(jqXHR.responseText);
+                        }
+                    }
+                });
+            }
+
+
+        }
+    </script>
+</th:block>
+</html>

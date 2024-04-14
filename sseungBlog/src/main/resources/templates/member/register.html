@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<main layout:fragment="content" class="main">
+    <section class="pt-5 padding-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5">
+                            <form action="/register" method="post" id="contact-form" class="contact-form">
+                                <h3 class="mb-4 text-center">REGISTER</h3>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="name"></label>
+                                            <input class="form-control form-control-name" name="name" id="name"
+                                                   type="text" placeholder="이름" maxlength="250" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="email"></label>
+                                            <input class="form-control form-control-email" name="email" id="email"
+                                                   type="text" placeholder="이메일" maxlength="250" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="password"></label>
+                                            <input class="form-control form-control-password" name="password" id="password"
+                                                   type="password" placeholder="비밀번호" maxlength="250" required>
+                                        </div>
+
+                                        <button class="btn btn-primary solid blank mt-3" type="submit" style="width:100%; background-color:black; color:white; border: 1px solid black;">회원가입</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5" style="text-align: center; padding-top:20px;">
+                            <a href="/login">이미 회원이신가요? 로그인 하시겠습니까?</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+</html>

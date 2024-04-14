@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <title>sseung</title>
+    <link rel="stylesheet"th:href="@{fonts/icomoon/style.css}">
+    <link rel="stylesheet"th:href="@{css/bootstrap.min.css}">
+    <link rel="stylesheet"th:href="@{css/magnific-popup.css}">
+    <link rel="stylesheet"th:href="@{css/jquery-ui.css}">
+    <link rel="stylesheet"th:href="@{css/owl.carousel.min.css}">
+    <link rel="stylesheet"th:href="@{css/owl.theme.default.min.css}">
+    <link rel="stylesheet"th:href="@{css/bootstrap-datepicker.css}">
+    <link rel="stylesheet"th:href="@{fonts/flaticon/font/flaticon.css}">
+    <link rel="stylesheet"th:href="@{css/aos.css}">
+
+    <link rel="stylesheet" href="css/style.css">
+
+
+    <!-- 각 페이지의 CSS가 작성될 위치지정 -->
+    <th:block layout:fragment="css"></th:block>
+
+    <!-- 공통으로 사용할 커스터마이징 된 CSS -->
+</head>
+<body>
+
+<div th:replace="fragments/header::header"></div>
+
+<div layout:fragment="content" class="content"></div>
+
+<div th:replace="fragments/footer::footer"></div>
+
+
+<!-- 공통으로 사용할 JS plugins -->
+<script th:src="@{js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{js/jquery-migrate-3.0.1.min.js}"></script>
+<script th:src="@{js/jquery-ui.js}"></script>
+<script th:src="@{js/popper.min.js}"></script>
+<script th:src="@{js/bootstrap.min.js}"></script>
+<script th:src="@{js/owl.carousel.min.js}"></script>
+<script th:src="@{js/jquery.stellar.min.js}"></script>
+<script th:src="@{js/jquery.countdown.min.js}"></script>
+<script th:src="@{js/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{js/bootstrap-datepicker.min.js}"></script>
+<script th:src="@{js/aos.js}"></script>
+
+<script th:src="@{js/main.js}"></script>
+
+<!-- 각 페이지의 JS가 작성될 위치지정 -->
+<th:block layout:fragment="script"></th:block>
+
+</body>
+</html>

@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/game.main.iml" filepath="$PROJECT_DIR$/.idea/modules/game.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/spring.iml" filepath="$PROJECT_DIR$/.idea/spring.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sseungBlog.main.iml" filepath="$PROJECT_DIR$/.idea/modules/sseungBlog.main.iml" />
     </modules>
   </component>
 </project>
