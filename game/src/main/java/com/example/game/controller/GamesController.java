@@ -66,20 +66,7 @@ public class GamesController {
 
     @PostMapping("/purchase/{gNo}")
     public String purchaseGame(@PathVariable("gNo") int gNo, HttpSession session, @RequestParam("gPrice") int gPrice, RedirectAttributes redirectAttributes) {
-        boolean purchaseSuccess = purchaseService.purchaseGame(session, gNo, gPrice);
-
-        if (purchaseSuccess) {
-//            Member member = (Member) session.getAttribute("member");
-//            Games games = (Games) session.getAttribute("games");
-//            Library library = (Library) session.getAttribute("library");
-//            libraryGameService.addGameToLibrary(member, games, library);
-
-            redirectAttributes.addFlashAttribute("successMessage", "게임을 구매하였습니다.");
-
-        } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "잔액이 부족하여 게임을 구매할 수 없습니다.");
-        }
-
+        purchaseService.purchaseGame(session, gNo, gPrice);
         return "redirect:/games/" + gNo;
     }
 

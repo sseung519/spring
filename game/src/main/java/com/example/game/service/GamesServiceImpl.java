@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class GamesServiceImpl implements GamesService{
+public class GamesServiceImpl implements GamesService {
     @Autowired
     GamesDao gamesDao;
 
@@ -23,13 +23,6 @@ public class GamesServiceImpl implements GamesService{
         return gamesDao.getGameByNo(gNo);
     }
 
-    @Override
-    public boolean purchaseGame(HttpSession session, int gNo, int gPrice) {
-        return gamesDao.purchaseGame(session, gNo,gPrice);
-    }
-
-    @Override
-    public void addToLibrary(HttpSession session, int gNo) {
-        gamesDao.addToLibrary(session, gNo);
-    }
 }
+
+

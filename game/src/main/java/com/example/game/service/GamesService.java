@@ -8,6 +8,5 @@ import java.util.List;
 public interface GamesService {
    public List<Games> getAllGames();
    public Games getGameByNo(int gNo);
-    public boolean purchaseGame(HttpSession session, int gNo, int gPrice);
-    public void addToLibrary(HttpSession session, int gNo);
+
 }
