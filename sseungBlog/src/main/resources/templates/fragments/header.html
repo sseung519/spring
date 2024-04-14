@@ -23,8 +23,8 @@
 
                 <ul class="site-menu js-clone-nav mx-auto d-none d-lg-block mb-0">
                     <li class="active"><a href="/">Homepage</a></li>
-                    <li><a href="/notice">Notice</a></li>
-                    <li class="has-children">
+                    <li th:if="${session.name != null}"><a href="/notice">Notice</a></li>
+                    <li th:if="${session.name != null}"class="has-children">
                         <a href="/list">Write</a>
                         <ul class="dropdown">
                             <li><a href="/write">포스트 작성</a></li>

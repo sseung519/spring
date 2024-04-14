@@ -25,6 +25,14 @@
         <collection property="category" resultMap="Category"/>
         <collection property="member" resultMap="Member"/>
     </resultMap>
+    <resultMap id="Comm" type="Comm">
+        <result column="comm_id" property="commId"/>
+        <result column="comm_date" property="commDate"/>
+        <result column="comm_content" property="comnContent"/>
+        <result column="member_id" property="memberId"/>
+        <result column="post_id" property="postId"/>
+    </resultMap>
+
     <select id="getPostList" resultType="Post" parameterType="map" resultMap="Post">
         SELECT * FROM (
                           SELECT rownum rnum, DATA.* from (
@@ -39,7 +47,29 @@
                                                           ) DATA
                       ) WHERE rnum BETWEEN #{start} AND #{end}
     </select>
+    <select id="getNoticeList" resultType="Post" parameterType="map" resultMap="Post">
+        SELECT * FROM (
+                          SELECT rownum rnum, DATA.* from (
+                                                              SELECT p.POST_ID, p.SUBJECT, p.CONTENT, p.MEMBER_ID,
+                                                                     to_char(p.WRITE_DATE,'yyyy-mm-dd') write_date,
+                                                                     to_char(p.UPDATE_DATE,'yyyy-mm-dd') update_date,
+                                                                     p.VIEWS, c.CATEGORY_CODE, c.CATEGORY_NAME
+                                                              FROM post p, CATEGORY c
+                                                              WHERE p.CATEGORY_CODE = c.CATEGORY_CODE
+                                                                AND p.CATEGORY_CODE = '001'
+                                                                AND ${searchKey} LIKE '%' || #{searchValue} || '%'
+                                                              ORDER BY p.POST_ID DESC
+                                                          ) DATA
+                      ) WHERE rnum BETWEEN #{start} AND #{end}
+    </select>
     <select id="getDataCount" parameterType="map" resultType="int">
+        SELECT nvl(count(*),0)  FROM post
+        WHERE member_id = #{memberId}
+          AND SUBJECT LIKE '%%'
+          AND  ${searchKey} LIKE '%' ||#{searchValue} ||'%'
+    </select>
+
+    <select id="getNoticeDataCount" parameterType="map" resultType="int">
         SELECT nvl(count(*),0)  FROM post
         WHERE member_id = #{memberId}
           AND SUBJECT LIKE '%%'
@@ -72,4 +102,8 @@
         where p.member_id = m.member_id
           and p.post_id = #{postId}
     </select>
+
+    <insert id="insertComm" parameterType="Comm">
+        insert into comm values(comm_seq.nextval, sysdate, #{content}, #{memberId}, #{postId})
+    </insert>
 </mapper>

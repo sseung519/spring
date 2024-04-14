@@ -1,6 +1,7 @@
 package com.example.sseungBlog.service;
 
 import com.example.sseungBlog.dao.PostDao;
+import com.example.sseungBlog.dto.Comm;
 import com.example.sseungBlog.dto.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,16 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getPostList(Map map) throws Exception {
         return postDao.getPostList(map);
+    }
+
+    @Override
+    public List<Post> getNoticeList(Map map) throws Exception {
+        return postDao.getNoticeList(map);
+    }
+
+    @Override
+    public int getNoticeDataCount(Map map) throws Exception {
+        return postDao.getNoticeDataCount(map);
     }
 
     @Override
@@ -46,5 +57,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(int postId) throws Exception {
         postDao.deletePost(postId);
+    }
+
+    @Override
+    public void insertComm(Comm comm) throws Exception {
+        postDao.insertComm(comm);
     }
 }

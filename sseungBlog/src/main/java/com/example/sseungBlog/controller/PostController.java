@@ -1,6 +1,7 @@
 package com.example.sseungBlog.controller;
 
 
+import com.example.sseungBlog.dto.Comm;
 import com.example.sseungBlog.dto.Post;
 import com.example.sseungBlog.service.PostService;
 import com.example.sseungBlog.util.PagingUtil;
@@ -146,6 +147,78 @@ public class PostController {
         return "post/list";
     }
 
+    @RequestMapping(value = "/notice", method = { RequestMethod.GET, RequestMethod.POST})
+    public String notice(HttpSession session, HttpServletRequest request, Model model) {
+        try {
+            int memberId = (int) session.getAttribute("member_id");
+            String searchKey = request.getParameter("searchKey");
+            String searchValue = request.getParameter("searchValue");
+            String pageNum = request.getParameter("pageNum");
+
+            pagingUtil.setCurrentPage(1);
+            if (pageNum != null) {
+                // 현재 페이지의 값을 바꿔준다.
+                pagingUtil.setCurrentPage(Integer.parseInt(pageNum));
+            }
+            if (searchValue == null) {
+                // 검색어가 없다면
+                searchKey = "subject"; // 검색 키워드의 디폴트는 subject
+                searchValue = ""; // 검색어의 디폴트는 빈문자열
+            } else {
+                searchValue = URLDecoder.decode(searchValue, "UTF-8");
+            }
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("memberId", memberId);
+            map.put("searchKey", searchKey);
+            map.put("searchValue", searchValue);
+            //공지사항만 가져오기 위해서 저장된 map에 공지사항인 001코드만 가져오기
+            map.put("categoryCode", "001");
+
+            // 1. 전체 공지사항 게시물의 갯수를 가져온다(페이징 처리시 필요)
+            int dataCount = postService.getNoticeDataCount(map);
+
+            // 2. 페이징 처리를 한다(준비단계)
+            // numPerPage : 페이지당 보여줄 게시물 목록의 갯수
+            pagingUtil.resetPaging(dataCount, 5);
+            map.put("start", pagingUtil.getStart());
+            map.put("end", pagingUtil.getEnd());
+
+            // 3. 페이징 처리할 공지사항 리스트를 가지고 온다.
+            List<Post> noticeList = postService.getNoticeList(map);
+
+            // 4. 검색어에 대한 쿼리스트링을 만든다.
+            String param = "";
+            String listUrl = "/notice";
+            String articleUrl = "/view?pageNum=" + pagingUtil.getCurrentPage();
+            if (searchValue != null && !searchValue.equals("")) {
+                param = "searchKey=" + searchKey;
+                param += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+            }
+            // 검색어가 있다면
+            if (!param.equals("")) {
+                // listUrl의 값: /notice?searchKey=subject&searchValue=네번째
+                listUrl += "?" + param;
+                // articleUrl의 값: /view?pageNum=1&searchKey=subject&searchValue=네번째
+                articleUrl += "&" + param;
+            }
+
+            // 5. 페이징 버튼을 만들어준다.
+            String pageIndexList = pagingUtil.pageIndexList(listUrl);
+
+            model.addAttribute("lists", noticeList); // DB에서 가져온 공지사항 리스트
+            model.addAttribute("articleUrl", articleUrl); // 상세페이지로 이동하기 위한 url
+            model.addAttribute("pageIndexList", pageIndexList); // 페이징 버튼
+            model.addAttribute("dataCount", dataCount); // 공지사항의 전체 갯수
+            model.addAttribute("searchKey", searchKey); // 검색키워드
+            model.addAttribute("searchValue", searchValue); // 검색어
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return "post/notice";
+    }
+
+
     @PostMapping(value = "/insert")
     public String insertPost(Post post, HttpSession session) {
         //1. 세션에서 사용자 member_id 가져오기
@@ -268,5 +341,25 @@ public class PostController {
         model.addAttribute("url", uploadPath);
 
         return "jsonView"; //model에 있는 값들이 json 객체 형식으로 forward 된다.
+    }
+
+    @PostMapping(value= "/comm")
+    public String insertComm(Comm comm, HttpSession session, HttpServletRequest request) {
+        Object memberId = (int) session.getAttribute("member_id");
+        int postId = Integer.parseInt(request.getParameter("postId"));
+
+        try{
+            if(memberId == null) {
+                return "redirect:/login";
+            } else{
+                comm.setMemberId((int) memberId);
+                postService.insertComm(comm);
+            }
+
+        } catch(Exception e) {
+            e.printStackTrace();
+
+        }
+        return "redirect:/view" + postId;
     }
 }
