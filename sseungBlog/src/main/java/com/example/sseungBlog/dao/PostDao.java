@@ -23,4 +23,5 @@ public interface PostDao {
     public void deletePost(int postId) throws Exception;
 
     public void insertComm(Comm comm) throws Exception;
+    public List<Comm> getCommList(Map map) throws Exception;
 }

@@ -59,8 +59,15 @@ public class PostServiceImpl implements PostService {
         postDao.deletePost(postId);
     }
 
+
+
     @Override
     public void insertComm(Comm comm) throws Exception {
         postDao.insertComm(comm);
+    }
+
+    @Override
+    public List<Comm> getCommList(Map map) throws Exception {
+        return postDao.getCommList(map);
     }
 }

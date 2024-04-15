@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Comm {
-    private int comm_id;
+    private int commId;
     private String commDate;
     private String commContent;
     private int memberId;

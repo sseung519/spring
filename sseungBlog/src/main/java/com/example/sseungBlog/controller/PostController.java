@@ -38,9 +38,10 @@ public class PostController {
     }
 
     @GetMapping(value = "/view")
-    public String view(HttpServletRequest request, Model model) {
+    public String view(HttpServletRequest request, Model model, HttpSession session) {
         {
             try {
+                Object memberId = session.getAttribute("member_id");
                 int postId = Integer.parseInt(request.getParameter("postId"));
                 String pageNum = request.getParameter("pageNum");
                 String searchKey = request.getParameter("searchKey");
@@ -52,6 +53,11 @@ public class PostController {
 
                 //2. 게시물 데이터 가져오기
                 Post post = postService.getReadPost(postId);
+                Map map = new HashMap<>();
+                map.put("postId", postId);
+                map.put("memberId", memberId);
+                List<Comm> commList = postService.getCommList(map);
+                model.addAttribute("commList", commList);
 
                 //가져온 게시물이 없다면
                 if (post == null) return "redirect:/list?pageNum=" + pageNum;
@@ -332,6 +338,8 @@ public class PostController {
         return new ResponseEntity<Integer>(postId, HttpStatus.OK);
     }
 
+
+
     //서버에 이미지 업로드 reqeust
     @PostMapping(value = "/postImgUpload")
     public String postImgUpload(MultipartHttpServletRequest request, Model model) {
@@ -343,23 +351,36 @@ public class PostController {
         return "jsonView"; //model에 있는 값들이 json 객체 형식으로 forward 된다.
     }
 
-    @PostMapping(value= "/comm")
+    @PostMapping(value= "/insertComm")
     public String insertComm(Comm comm, HttpSession session, HttpServletRequest request) {
-        Object memberId = (int) session.getAttribute("member_id");
-        int postId = Integer.parseInt(request.getParameter("postId"));
+        String param = "";
+        try {
+            String pageNum = request.getParameter("pageNum");
+            String searchKey = request.getParameter("searchKey");
+            String searchValue = request.getParameter("searchValue");
+            Object memberId = session.getAttribute("member_id");
+            String postId = request.getParameter("postId");
+            param = "?postId=" + postId + "&pageNum=" + pageNum;
 
-        try{
-            if(memberId == null) {
-                return "redirect:/login";
-            } else{
-                comm.setMemberId((int) memberId);
-                postService.insertComm(comm);
+            if(searchValue != null && !searchValue.equals("")) {
+                searchValue = URLDecoder.decode(searchValue, "UTF-8");
+                //검색어가 있다면
+                param += "&searchKey=" + searchKey;
+                param += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8"); //컴퓨터의 언어로 인코딩
             }
 
-        } catch(Exception e) {
-            e.printStackTrace();
+            if(memberId == null) {
+                return "redirect:/login"; // 세션 만료시 로그인 페이지로 이동
+            } else {
+                comm.setPostId(Integer.parseInt(postId));
+                comm.setMemberId((Integer) memberId);
+                postService.insertComm(comm); // 포스트 update 서비스 호출
 
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        return "redirect:/view" + postId;
+
+        return "redirect:/view" + param;
     }
 }

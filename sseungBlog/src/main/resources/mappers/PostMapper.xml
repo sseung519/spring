@@ -28,9 +28,11 @@
     <resultMap id="Comm" type="Comm">
         <result column="comm_id" property="commId"/>
         <result column="comm_date" property="commDate"/>
-        <result column="comm_content" property="comnContent"/>
+        <result column="comm_content" property="commContent"/>
         <result column="member_id" property="memberId"/>
         <result column="post_id" property="postId"/>
+        <collection property="member" resultMap="Member"/>
+        <collection property="post" resultMap="Post"/>
     </resultMap>
 
     <select id="getPostList" resultType="Post" parameterType="map" resultMap="Post">
@@ -104,6 +106,14 @@
     </select>
 
     <insert id="insertComm" parameterType="Comm">
-        insert into comm values(comm_seq.nextval, sysdate, #{content}, #{memberId}, #{postId})
+        insert into comm values(comm_seq.nextval, sysdate, #{commContent}, #{memberId}, #{postId})
     </insert>
+
+    <select id="getCommList" resultType="Comm" resultMap="Comm">
+        select *
+        from comm c
+                 join member m on c.member_id = m.member_id
+                 join post r on c.post_id = r.post_id
+        WHERE c.post_id = #{postId}
+    </select>
 </mapper>
