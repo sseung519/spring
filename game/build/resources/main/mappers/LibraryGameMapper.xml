@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.game.dao.LibraryGameDao">
+    <resultMap id="LibraryGame" type="LibraryGame">
+        <result column="lg_no" property="lgNo" />
+    </resultMap>
+    <resultMap id="Library" type="Library">
+        <result column="l_no" property="lNo" />
+    </resultMap>
+    <resultMap id="Member" type="Member" >
+        <result column="member_id" property="memberId" />
+        <result column="email" property="email" />
+        <result column="name" property="name" />
+        <result column="password" property="password" />
+        <result column="balance" property="balance" />
+    </resultMap>
+    <resultMap id="Games" type="Games">
+        <result column="g_no" property="gNo" />
+        <result column="g_name" property="gName" />
+        <result column="g_info" property="gInfo" />
+        <result column="g_date" property="gDate" />
+        <result column="g_price" property="gPrice" />
+        <result column="img" property="img" />
+    </resultMap>
+
+</mapper>

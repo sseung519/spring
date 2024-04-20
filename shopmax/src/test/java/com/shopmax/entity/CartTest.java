@@ -27,7 +27,7 @@ public class CartTest {
     public Member createMember() {
         //사용자가 입력한 회원가입정보
         MemberFormDto memberFormDto = new MemberFormDto();
-        memberFormDto.setEmail("test3@gmail.com");
+        memberFormDto.setEmail("test1@gmail.com");
         memberFormDto.setName("토끼");
         memberFormDto.setAddress("서울시 마포구 합정동");
         memberFormDto.setPassword("1234");
