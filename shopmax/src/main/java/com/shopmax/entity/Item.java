@@ -11,7 +11,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Item {
+public class Item extends BaseEntity  {
     @Id
     @Column(name="item_id") //테이블로 생성될때 컬럼이름을 지정해준다
     @GeneratedValue(strategy = GenerationType.IDENTITY) //기본키를 자동으로 생성해주는 전략 사용

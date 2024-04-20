@@ -10,7 +10,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ItemImg {
+public class ItemImg extends BaseEntity {
     @Id
     @Column(name="item_img_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class ItemImg {
 
     private String repImgYn;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="item_id")
     private Item item;
 
