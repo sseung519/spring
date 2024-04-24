@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+  <div layout:fragment="content">
+    <div class="bg-light py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0">
+            <a href="/">Home</a>
+            <span class="mx-2 mb-0">/</span>
+            <!--주소에 페이지넘버까지? 이전페이지? 과다? -->
+            <a href="/posts/list">게시글 목록</a>
+            <strong class="text-black">상세 보기</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <section class="single-block-wrapper section-padding">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+            <div class="single-post">
+              <div class="post-header mb-5 text-center">
+                <div class="meta-cat">
+                  <a class="post-category font-extra text-color text-uppercase font-sm letter-spacing-1"
+                     href="#"></a>
+                </div>
+                <h2 class="post-title mt-2" th:text="${review.subject}"></h2>
+                
+                <div class="post-meta">
+                  <span class="text-uppercase font-sm letter-spacing-1 mr-3" th:text="'BY.' + ${review.member.name}"></span>
+                  <span class="text-uppercase font-sm letter-spacing-1" th:text="${review.writeDate}"></span>
+                </div>
+              </div>
+              <div class="post-body">
+                <!-- th:text => 태그도 그냥 문자로 출력 -->
+                <!-- th:utext => 문자는 문자로, 태그는 태그로 출력 -->
+                <div class="entry-content" th:utext="${review.content}"></div>
+                
+                <div
+                    class="tags-share-box center-box d-flex text-center justify-content-between border-top border-bottom py-3">
+                  
+                  <span class="single-comment-o"><i class="fa fa-comment-o"></i></span>
+                  
+                  <div class="list-posts-share" th:if="${session.member_id} == ${review.memberId}">
+                    <a th:onclick="|location.href='edit?reviewId=@{${review.reviewId}}&@{${params}}'|" style="cursor:pointer;">수정</a>
+                    <a th:onclick="deletePost(); return false;" style="cursor:pointer;">삭제</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="comment-area my-5">
+              <h3 class="mb-4 text-center">댓글</h3>
+              <div class="comment-area-box media">
+                <div class="media-body ml-4" th:if="${commentList.size()} >0" th:each="comment:${commentList}">
+                  <h4 class="mb-0" th:text="${comment.member.name}"></h4>
+                  <span class="date-comm font-sm text-capitalize text-color" th:text="${comment.updateDate}"></span>
+                  <div class="comment-content mt-3">
+                    <p th:utext="${comment.content}"></p>
+                  </div>
+                  <div class="comment-content mt-3" th:if="${comment.memberId} == ${session.member_id}">
+                    <a th:onclick="deleteComment(); return false;" style="cursor:pointer;">삭제하기</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <form class="comment-form mb-5 gray-bg p-5" id="comment-form" action="/comment" method="post">
+              <h3 class="mb-4 text-center">댓글 남기기</h3>
+              <div class="row">
+                <div class="col-lg-12">
+                                <textarea class="form-control mb-3" name="content" id="content" cols="30" rows="5"
+                                          placeholder="Comment"></textarea>
+                </div>
+              </div>
+              <input type="hidden" name="reviewId" th:value="${review.reviewId}" />
+              <input type="hidden" name="pageNum" th:value="${pageNum}" />
+              <input type="hidden" name="searchKey" th:value="${searchKey}" />
+              <input type="hidden" name="searchValue" th:value="${searchValue}" />
+              <input class="btn btn-primary" type="submit" name="submit-contact" id="submit_contact"
+                     value="등록">
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <th:block layout:fragment="script">
+    <script th:inline="javascript">
+      function deletePost() {
+        const result = confirm("해당 포스트 삭제하시겠습니까?");
+        const url = '/delete/' + [[${review.reviewId}]]; // request URL
+        
+        if(result) {
+          $.ajax({
+            url : url,
+            type : "DELETE", // 전송방식
+            contentType : "application/json",
+            dataType : "json",
+            cache : false,
+            success : function(result, status) {
+              console.log("result reviewId: " + result + ", statusCode: " + status);
+              location.href = '/list';
+            },
+            error : function(jqXHR, status, error) {
+              console.log("result: " + jqXHR.responseText + ", statusCode: " + status);
+              
+              
+              if(jqXHR.status == '401') { // UNATHORIZED
+                location.href = '/login';
+              } else {
+                alert(jqXHR.responseText);
+              }
+            }
+          });
+        }
+      }
+    </script>
+  </th:block>
+</html>

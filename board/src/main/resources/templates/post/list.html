@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+  <div layout:fragment="content">
+    <div class="bg-light py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0">
+            <a href="/">Home</a> <span class="mx-2 mb-0">/</span>
+            <strong class="text-black">게시판 목록</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="site-section">
+      <!-- Content Start -->
+      <div class="container">
+        <!-- Table Start -->
+        <div class="container-fluid pt-4 px-4">
+          <div class="row g-4">
+            <div class="col-12">
+              <div class="rounded h-100 p-4">
+                <h6 class="mb-4">영화 리뷰</h6>
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">영화</th>
+                        <th scope="col">별점</th>
+                        <th scope="col">제목</th>
+                        <th scope="col">작성자</th>
+                        <th scope="col">최종작성일</th>
+                        <th scope="col">조회수</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- 등록된 포스트가 있을 경우 -->
+                      <!-- lists에서 값을 가져와서 사용. -->
+                      <tr>
+                        <th scope="row">0</th>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>
+                          <a href="/posts/detail">
+                            3
+                          </a>
+                        </td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>6</td>
+                      </tr>
+                      <!-- 등록된 포스트가 없을 경우 -->
+                      <!--                                    <tr>-->
+                      <!--                                        <td colspan="5">등록된 게시물이 없습니다.</td>-->
+                      <!--                                    </tr>-->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 페이징 버튼 -->
+          <!--                <div class="row justify-content-center">-->
+          <!--                    <div class="col-lg-8">-->
+          <!--                        <nav aria-label="...">-->
+          <!--                            <ul class="pagination justify-content-center" style="margin-top: 10px;">-->
+          <!--                                [(${pageIndexList})]-->
+          <!--                            </ul>-->
+          <!--                        </nav>-->
+          <!--                    </div>-->
+          <!--                    <div class="col-lg-4">-->
+          <!--                        <a href="/write" type="button" class="btn btn-primary m-2">글쓰기<i class="fa fa-home ms-2"></i></a>-->
+          <!--                    </div>-->
+          <!--                    &lt;!&ndash; 검색바 &ndash;&gt;-->
+          <!--                    <div class="row justify-content-center">-->
+          <!--                        <div class="col-lg-7">-->
+          <!--                            <form action="/list" method="post" name="searchForm">-->
+          <!--                                <div class="row">-->
+          <!--                                    <div class="col-lg-3 px-1">-->
+          <!--                                        <select name="searchKey" class="form-control">-->
+          <!--                                            <option value="subject" th:selected="${searchKey} == 'subject'">제목</option>-->
+          <!--                                            <option value="content" th:selected="${searchKey} == 'content'">내용</option>-->
+          <!--                                        </select>-->
+          <!--                                    </div>-->
+          <!--                                    <div class="col-lg-6 px-1">-->
+          <!--                                        <input type="text" name="searchValue" class="form-control" placeholder="검색어입력" th:value="${searchValue}"/>-->
+          <!--                                    </div>-->
+          <!--                                    <div class="col-lg-3 px-1">-->
+          <!--                                        <input type="button" value=" 검색 " class="btn btn-secondary" style="height: 100%;" onclick="sendIt()"/>-->
+          <!--                                    </div>-->
+          <!--                                </div>-->
+          <!--                            </form>-->
+          <!--                        </div>-->
+          <!--                    </div>-->
+          <!--                </div>-->
+          <!-- Table End -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <th:block layout:fragment="script">
+    <script th:inline="javascript">
+      function sendIt(){
+        var f = document.searchForm; // name검색
+        var str = f.searchValue.value; //검색어
+        str = str.trim(); // 글자의 양쪽 공백 제거
+        
+        if(!str) {
+          alert("검색어를 입력하세요.");
+          f.searchValue.focus(); // input 창에 포커스
+          return;
+        }
+        
+        f.submit(); // form 태그 안의 내용을 전송
+      }
+    </script>
+  </th:block>
+
+</html>

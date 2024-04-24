@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class Comment {
+public class Comment extends BaseEntity {
     @Id
     @Column(name="comment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name="board_id")
-    private Board board;
+    private Post post;
 
     @ManyToOne
     @JoinColumn(name="member_id")
