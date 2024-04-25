@@ -3,6 +3,7 @@ package com.shopmax.service;
 import com.shopmax.dto.ItemFormDto;
 import com.shopmax.dto.ItemImgDto;
 import com.shopmax.dto.ItemSearchDto;
+import com.shopmax.dto.MainItemDto;
 import com.shopmax.entity.Item;
 import com.shopmax.entity.ItemImg;
 import com.shopmax.repository.ItemImgRepository;
@@ -110,4 +111,11 @@ public class ItemService {
         Page<Item> itemPage = itemRepository.getAdminItemPage(itemSearchDto, pageable);
         return itemPage;
     }
+
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        Page<MainItemDto> mainItemDtoPage = itemRepository.getMainItemPage(itemSearchDto, pageable);
+
+        return mainItemDtoPage;
+    }
+
 }
