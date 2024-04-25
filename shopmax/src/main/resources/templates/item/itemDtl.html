@@ -113,7 +113,17 @@
       
       $('.js-btn-plus').on('click', function(e){
         e.preventDefault();
+        const stock = [[${item.stockNumber}]]; //재고
+        var count = $("#count").val(); //수량
+        
+        if(count >= stock) {
+          alert("더이상 재고가 존재하지 않습니다!");
+          $(this).closest('.input-group').find('.form-control').val(parseInt(count));
+          return;
+        }
+        
         $(this).closest('.input-group').find('.form-control').val(parseInt($(this).closest('.input-group').find('.form-control').val()) + 1);
+       
         
         calculateTotalPrice();
       });
