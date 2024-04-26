@@ -1,6 +1,7 @@
 package com.board.entity;
 
 import com.board.constant.PostCategoryStatus;
+import com.board.dto.PostFormDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,4 +26,10 @@ public class Post extends BaseEntity{
 
     @Enumerated(EnumType.STRING)
     private PostCategoryStatus postCategoryStatus;
+
+    public void updatePost(PostFormDto postFormDto) {
+        this.title = postFormDto.getTitle();
+        this.content = postFormDto.getContent();
+        this.postCategoryStatus = postFormDto.getPostCategoryStatus();
+    }
 }

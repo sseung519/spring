@@ -33,5 +33,34 @@ public class Order { //클래스명은 복수형으로 쓰지 않는다.
     , orphanRemoval = true) //연관관계 주인을 설정(order는 주인이 아니다) 주인은 fk를 가지고있는 엔티티
     private List<OrderItem> orderItems = new ArrayList<>();
 
+
+    //*양방향 참조 시 save를 진행할때는 서로가 참조하는 객체를 꼭 넣어줘야한다.
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this); //*양방향 참조관게 일때는 orderItem 객체에도 order객체를 세팅
+    }
+
+    public static Order createOrder(Member member, List<OrderItem> orderItemList) {
+        Order order = new Order();
+        order.setMember(member);
+
+        for (OrderItem orderItem : orderItemList) {
+            order.addOrderItem(orderItem);
+        }
+
+        order.setOrderStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+
+        return order;
+    }
+
+    //총 주문 금액
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        for(OrderItem orderItem : orderItems) {
+           totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
+    }
 }
 

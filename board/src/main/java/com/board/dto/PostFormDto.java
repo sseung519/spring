@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class PostFormDto {
@@ -19,6 +21,10 @@ public class PostFormDto {
   private String content;
 
   private PostCategoryStatus postCategoryStatus;
+
+  private String createdBy;
+  private LocalDateTime regDate;
+  private LocalDateTime updateDate;
 
 
   private static ModelMapper modelMapper = new ModelMapper();

@@ -84,9 +84,11 @@ public class ItemController {
 
         if(bindingResult.hasErrors()) return "item/itemForm"; //유효성 체크에서 걸리면
 
+        ItemFormDto getItemFormDto = itemService.getItemDtl(itemId);
+
         //상품등록 전에 첫번째 이미지가 있는지 없는지 검사(첫번째 이미지는 필수 입력값)
-        //itemFormDto.getId() == null => 이미지 외에 다른 내용만 수정했을때
-        if(itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null){
+        //itemFormDto.getId() == null => 이미지 외에 다른 내용만 수정헀을때 if문에 걸리는 경우를 방지.
+        if(itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null) {
             model.addAttribute("errorMessage",
                     "첫번째 상품 이미지는 필수 입력입니다.");
             return "item/itemModifyForm";
@@ -98,11 +100,11 @@ public class ItemController {
             e.printStackTrace();
             model.addAttribute("errorMessage",
                     "상품 수정중 에러가 발생했습니다.");
+            model.addAttribute("itemFormDto", getItemFormDto);
             return "item/itemModifyForm";
         }
 
         return "redirect:/";
-
     }
 
     //상품 관리 페이지

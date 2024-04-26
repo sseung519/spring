@@ -27,14 +27,14 @@
               <li class="has-children active">
                 <a>공지사항</a>
                 <ul class="dropdown">
-                  <li><a href="/admin/notices">공지사항 보기</a></li>
-                  <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')"><a href="/admin/notice/new">공지사항 등록</a></li>
+                  <li><a href="/notice/list">공지사항 보기</a></li>
+                  <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')"><a href="/post/write">공지사항 등록</a></li>
                 </ul>
               </li>
               <li sec:authorize="isAuthenticated()" class="has-children active">
                 <a>포스트</a>
                 <ul class="dropdown">
-                  <li><a href="/post/posts">포스트 보기</a></li>
+                  <li><a href="/post/list">포스트 보기</a></li>
                   <li><a href="/post/write">포스트 등록</a></li>
                 </ul>
               </li>

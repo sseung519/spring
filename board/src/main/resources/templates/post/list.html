@@ -17,86 +17,107 @@
     <div class="site-section">
       <!-- Content Start -->
       <div class="container">
-        <!-- Table Start -->
-        <div class="container-fluid pt-4 px-4">
-          <div class="row g-4">
-            <div class="col-12">
-              <div class="rounded h-100 p-4">
-                <h6 class="mb-4">영화 리뷰</h6>
-                <div class="table-responsive">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">영화</th>
-                        <th scope="col">별점</th>
-                        <th scope="col">제목</th>
-                        <th scope="col">작성자</th>
-                        <th scope="col">최종작성일</th>
-                        <th scope="col">조회수</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <!-- 등록된 포스트가 있을 경우 -->
-                      <!-- lists에서 값을 가져와서 사용. -->
-                      <tr>
-                        <th scope="row">0</th>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>
-                          <a href="/posts/detail">
-                            3
-                          </a>
-                        </td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td>6</td>
-                      </tr>
-                      <!-- 등록된 포스트가 없을 경우 -->
-                      <!--                                    <tr>-->
-                      <!--                                        <td colspan="5">등록된 게시물이 없습니다.</td>-->
-                      <!--                                    </tr>-->
-                    </tbody>
-                  </table>
+        <div class="row">
+          <div class="col-md-12">
+            <h2 class="h3 mb-3 text-black">게시글</h2>
+            <form th:action="@{'/post/list/' + ${posts.number}}"
+                  method="get" th:object="${posts}">
+              <table class="table table-responsive-md">
+                <thead>
+                  <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">제목</th>
+                    <th scope="col">분류</th>
+                    <th scope="col">등록자</th>
+                    <th scope="col">등록일</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="post, status: ${posts.getContent()}">
+                    <th th:text="${post.id}" scope="row"></th>
+                    <td>
+                      <a th:href="'/post/detail/' + ${post.id}"
+                         th:text="${post.title}">
+                      </a>
+                    </td>
+                    <td th:text="${post.postCategoryStatus}"></td>
+                    <td th:text="${post.createdBy}"></td>
+                    <td th:text="${post.regTime}"></td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <!-- 페이징버튼 -->
+              <!-- start = (현재 페이지 번호/보여줄 페이지수) * 보여줄 페이지수 + 1, 페이지 시작번호 -->
+              <!-- end = start + (보여줄 페이지수 - 1), 페이지 끝번호 -->
+              <!--
+                      끝번호가 전체페이지보다 작으면 그냥 끝번호를 쓴다
+                      예) 전체 페이지 7, 끝번호 5
+                      ◀ 1 2 3 4 5 ▶
+                      ◀ 6 7
+                 -->
+              <nav aria-label="Page navigation example"
+                   th:with="start=${(posts.number/maxPage) * maxPage + 1},
+                end= (${(posts.totalPages == 0) ? 1 : (start + (maxPage - 1) < posts.totalPages ? start + (maxPage - 1) : posts.totalPages)}) "
+              >
+                <ul class="pagination d-flex justify-content-center">
+                  <li class="page-item" th:classappend="${posts.first} ? ' disabled'">
+                    <a class="page-link"
+                       th:onclick="'javascript:page(' + ${posts.number - 1} + ')'"
+                    >이전</a>
+                  </li>
+                  
+                  <li class="page-item"
+                      th:each="page: ${#numbers.sequence(start, end)}"
+                      th:classappend="${posts.number eq page-1} ? 'active' : ''"
+                  >
+                    <a class="page-link" th:inline="text"
+                       th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                    >[[${page}]]</a>
+                  </li>
+                  
+                  <li class="page-item" th:classappend="${posts.last}?' disabled'">
+                    <a class="page-link"
+                       th:onclick="'javascript:page(' + ${posts.number + 1} + ')'"
+                    >다음</a>
+                  </li>
+                </ul>
+              </nav>
+              
+              <div class="row" style="height: 40px" th:object="${postSearchDto}">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-5" style="display: flex">
+                  <!-- 포스트 등록일 -->
+                  <select class="form-control" th:field="*{searchDateType}">
+                    <option value="all" >전체기간</option>
+                    <option value="1d">1일</option>
+                    <option value="1w">1주</option>
+                    <option value="1m">1개월</option>
+                    <option value="6m">6개월</option>
+                  </select>
+                  <!-- 상품판매 상태 -->
+                  <select class="form-control" th:field="*{searchPostCategoryStatus}">
+                    <option value="">태그(전체)</option>
+                    <option value="NOTICE">공지</option>
+                    <option value="NORMAL">일반</option>
+                  </select>
+                  <!-- 상품명, 등록자 선택 -->
+                  <select class="form-control" th:field="*{searchBy}">
+                    <option value="title">제목</option>
+                    <option value="content">내용</option>
+                    <option value="createdBy">등록자</option>
+                  </select>
                 </div>
+                <div class="col-lg-3">
+                  <div style="display: flex">
+                    <input type="text" class="form-control" placeholder="검색어 입력" th:field="*{searchQuery}"/>
+                    <button id="searchBtn" type="submit" class="btn btn-primary mb-3">검색</button>
+                  </div>
+                </div>
+                <div class="col-lg-2"></div>
               </div>
-            </div>
+            </form>
           </div>
-          <!-- 페이징 버튼 -->
-          <!--                <div class="row justify-content-center">-->
-          <!--                    <div class="col-lg-8">-->
-          <!--                        <nav aria-label="...">-->
-          <!--                            <ul class="pagination justify-content-center" style="margin-top: 10px;">-->
-          <!--                                [(${pageIndexList})]-->
-          <!--                            </ul>-->
-          <!--                        </nav>-->
-          <!--                    </div>-->
-          <!--                    <div class="col-lg-4">-->
-          <!--                        <a href="/write" type="button" class="btn btn-primary m-2">글쓰기<i class="fa fa-home ms-2"></i></a>-->
-          <!--                    </div>-->
-          <!--                    &lt;!&ndash; 검색바 &ndash;&gt;-->
-          <!--                    <div class="row justify-content-center">-->
-          <!--                        <div class="col-lg-7">-->
-          <!--                            <form action="/list" method="post" name="searchForm">-->
-          <!--                                <div class="row">-->
-          <!--                                    <div class="col-lg-3 px-1">-->
-          <!--                                        <select name="searchKey" class="form-control">-->
-          <!--                                            <option value="subject" th:selected="${searchKey} == 'subject'">제목</option>-->
-          <!--                                            <option value="content" th:selected="${searchKey} == 'content'">내용</option>-->
-          <!--                                        </select>-->
-          <!--                                    </div>-->
-          <!--                                    <div class="col-lg-6 px-1">-->
-          <!--                                        <input type="text" name="searchValue" class="form-control" placeholder="검색어입력" th:value="${searchValue}"/>-->
-          <!--                                    </div>-->
-          <!--                                    <div class="col-lg-3 px-1">-->
-          <!--                                        <input type="button" value=" 검색 " class="btn btn-secondary" style="height: 100%;" onclick="sendIt()"/>-->
-          <!--                                    </div>-->
-          <!--                                </div>-->
-          <!--                            </form>-->
-          <!--                        </div>-->
-          <!--                    </div>-->
-          <!--                </div>-->
-          <!-- Table End -->
         </div>
       </div>
     </div>
@@ -104,19 +125,27 @@
   
   <th:block layout:fragment="script">
     <script th:inline="javascript">
-      function sendIt(){
-        var f = document.searchForm; // name검색
-        var str = f.searchValue.value; //검색어
-        str = str.trim(); // 글자의 양쪽 공백 제거
+      
+      $("#searchBtn").on("click", function(e) {
+        e.preventDefault(); // submit 방지
+        page(0);
+      });
+      
+      function page(page) {
+        //입력한 값을 전부 가지고 온다.
+        var searchDateType = $("#searchDateType").val();
+        var searchPostCategoryStatus= $("#searchPostCategoryStatus").val();
+        var searchBy = $("#searchBy").val();
+        var searchQuery = $("#searchQuery").val();
         
-        if(!str) {
-          alert("검색어를 입력하세요.");
-          f.searchValue.focus(); // input 창에 포커스
-          return;
-        }
-        
-        f.submit(); // form 태그 안의 내용을 전송
+        //주소 이동
+        location.href = "/post/list/" + page
+            + "?searchDateType=" + searchDateType
+            + "&searchPostCategoryStatus=" + searchPostCategoryStatus
+            + "&searchBy=" + searchBy
+            + "&searchQuery=" + searchQuery;
       }
+    
     </script>
   </th:block>
 
