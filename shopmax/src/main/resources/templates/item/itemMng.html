@@ -73,13 +73,13 @@
                   </li>
                   
                   <li class="page-item"
-                      th:each="page: ${#numbers.sequence(start, end)}">
+                      th:each="page: ${#numbers.sequence(start, end)}"
+                      th:classAppend="${items.number eq page-1} ? 'active' : ''"
+                  >
                     <a class="page-link" th:inline="text"
-                       th:onlick="'javascript:page(' + ${page - 1} + ')'"
+                       th:onclick="'javascript:page(' + ${page - 1} + ')'"
                     >[[${page}]]</a>
                   </li>
-                  
-                  
                   
                   <li class="page-item" th:classappend="${items.last}?' disabled'">
                     <a class="page-link"

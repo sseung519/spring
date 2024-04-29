@@ -57,4 +57,7 @@ public class Item extends BaseEntity  {
 
     }
 
+    public void addStock(int stockNumber) {
+        this.stockNumber += stockNumber;
+    }
 }

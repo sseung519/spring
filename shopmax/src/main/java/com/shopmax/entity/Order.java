@@ -62,5 +62,15 @@ public class Order { //클래스명은 복수형으로 쓰지 않는다.
         }
         return totalPrice;
     }
+
+    //주문 취소
+    public void cancelOrder() {
+        this.orderStatus = orderStatus.CANCEL;
+
+        //재고를 원래대로 돌려놓는다.
+        for(OrderItem orderItem : orderItems) {
+            orderItem.cancel();
+        }
+    }
 }
 

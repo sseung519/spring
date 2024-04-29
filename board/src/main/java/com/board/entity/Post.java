@@ -27,6 +27,7 @@ public class Post extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private PostCategoryStatus postCategoryStatus;
 
+
     public void updatePost(PostFormDto postFormDto) {
         this.title = postFormDto.getTitle();
         this.content = postFormDto.getContent();
