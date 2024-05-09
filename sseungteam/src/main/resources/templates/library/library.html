@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+  <head>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  </head>
+  
+  <div layout:fragment="content">
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+            <h2 class="h3 mb-3 text-black">라이브러리</h2>
+            <div th:each="library: ${libraries.getContent()}">
+              <div class="d-flex mb-3 align-self-center">
+              
+              </div>
+              <div class="card d-flex flex-row">
+                
+                <div th:each="libraryGame: ${library.libraryGameDtoList}"
+                     class="d-flex mb-3" style="width: 90%">
+                  <div class="repImgDiv">
+                    <img class="rounded repImg"
+                         th:src="${libraryGame.imgUrl}" th:alt="${libraryGame.gameName}" style="width: 3.5em" />
+                  </div>
+                  <div class="align-self-center w-75 text-center">
+                                    <span th:text="${libraryGame.gameName}"
+                                          class="font-weight-bold " style="font-size: 18px; color: black"></span>
+                    <div class="fs18 font-weight-light">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <nav th:with="start=${(libraries.number/maxPage)*maxPage + 1}
+                           ,end=(${(libraries.totalPages == 0) ? 1 : (start + (maxPage - 1) < libraries.totalPages ? start + (maxPage - 1) : libraries.totalPages)})"
+                   aria-label="Page navigation example">
+                <ul class="pagination d-flex justify-content-center">
+                  <li class="page-item" th:classappend="${libraries.first}?'disabled'">
+                    <!-- 검색어가 없을때는 주소에 쿼리스트링을 사용하지 않는다. -->
+                    <a class="page-link"
+                       th:href="@{'/library/' + ${libraries.number - 1}}">이전</a>
+                  </li>
+                  
+                  <li class="page-item"
+                      th:each="page: ${#numbers.sequence(start, end)}"
+                      th:classappend="${libraries.number eq page-1}?'active':''">
+                    <a
+                        class="page-link" th:inline="text"
+                        th:href="@{'/library/' + ${page - 1}}">[[${page}]]</a>
+                  </li>
+                  
+                  <li class="page-item" th:classappend="${libraries.last}?'disabled'">
+                    <a class="page-link"
+                       th:href="@{'/library/' + ${libraries.number + 1}}">다음</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+          <div class="col-md-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+  
+  <main layout:fragment="content" class="main">
+    <!-- Latest news section -->
+    <div class="latest-news-section">
+      <div class="ln-title">Latest News</div>
+      <div class="news-ticker">
+        <div class="news-ticker-contant">
+          <div class="nt-item"><span class="new">new</span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </div>
+          <div class="nt-item"><span class="strategy">strategy</span>Isum dolor sit amet, consectetur adipiscing elit. </div>
+          <div class="nt-item"><span class="racing">racing</span>Isum dolor sit amet, consectetur adipiscing elit. </div>
+        </div>
+      </div>
+    </div>
+    <!-- Latest news section end -->
+    
+    
+    <!-- Page info section -->
+    <section class="page-info-section set-bg" data-setbg="img/page-top-bg/3.jpg">
+      <div class="pi-content">
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-5 col-lg-6 text-white">
+              <h2>Games</h2>
+              <p>인기 있는 게임들을 지금 바로 구매하고 플레이 하세요!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Page info section -->
+    
+    
+    <!-- Page section -->
+    <section class="page-section review-page spad">
+      
+        <div class="container">
+          <div class="row">
+            <th:block th:each="game, status: ${games.getContent()}">
+            <div class="col-md-6">
+              <div class="review-item">
+                <a th:href="'/game/detail/'+${game.id}" class="review-item-link">
+                  <div class="review-cover set-bg" th:data-setbg="${game.imgUrl}">
+                  </div>
+                  <div class="review-text">
+                    <p th:if="${#strings.equals(game.gameRelease, 'RELEASE')}"
+                        th:text="판매중" style="color:black"></p>
+                    <p th:unless="${#strings.equals(game.gameRelease, 'RELEASE')}"
+                        th:text="출시예정" style="color:black"></p>
+                    <h5>
+                      <a th:href="'/game/detail/'+${game.id}">[[${game.gameName}]]</a>
+                    </h5>
+                    <h6 style="color:black">
+                      [[${#numbers.formatInteger(game.price,0, 'COMMA')}]]원
+                    </h6>
+                  </div>
+                </a>
+              </div>
+            </div>
+            </th:block>
+          </div>
+        </div>
+      <!-- 페이징-->
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <nav aria-label="Page navigation example" th:with="start=${(games.number/maxPage)*maxPage + 1}
+               ,end=(${(games.totalPages == 0) ? 1 : (start + (maxPage - 1) < games.totalPages ? start + (maxPage - 1) : games.totalPages)})">
+            <ul class="pagination d-flex justify-content-center">
+              <li class="page-item" th:classappend="${games.first}?'disabled'">
+              </li>
+              
+              <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}"
+                  th:classappend="${games.number eq page-1}?'active':''">
+                <a class="page-link"
+                   th:classappend="${games.number eq page-1}?'active':''" th:inline="text"
+                   th:href="@{'/game'+'/'+${page -1}}">[[${page}]]</a>
+              </li>
+              
+              <li class="page-item" th:classappend="${games.last}?'disabled'">
+                <a class="page-link"
+                   th:href="@{'/game'+'/'+${games.number +1}}">다음</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </section>
+    <!-- Page section end -->
+    
+  </main>
+</html>

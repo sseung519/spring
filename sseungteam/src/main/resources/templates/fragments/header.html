@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  
+  <header th:fragment="header" class="header-section">
+    <div class="container" th:object="${member}">
+      <!-- logo -->
+      <a class="site-logo" href="/">
+        <img src="/img/logo.png" alt="로고">
+      </a>
+      <div class="user-panel">
+        <a sec:authorize="isAnonymous()" href="/member/login">로그인</a>
+        <span sec:authorize="isAuthenticated()">
+                    <a href="/" th:if="${member.name != null}" th:text="${member.name} + '님'"></a>
+                    <a href="/member/logout" style="color:white;">로그아웃</a>
+                </span>
+      </div>
+      <div class="user-panel" sec:authorize="isAuthenticated()">
+        <span th:if="${member.name != null}">
+         잔고: [[${#numbers.formatInteger(member.balance,0, 'COMMA')}]]원
+        </span>
+      </div>
+      <!-- responsive -->
+      <div class="nav-switch">
+        <i class="fa fa-bars"></i>
+      </div>
+      <!-- site menu -->
+      <nav class="main-menu">
+       
+        <ul>
+          
+          <li><a sec:authorize="hasAnyAuthority('ROLE_ADMIN')" style="color:deeppink" href="/game/new" >게임등록</a></li>
+          <li><a href="/">홈</a></li>
+          <li><a href="/game">게임</a></li>
+          <li><a sec:authorize="isAuthenticated()" href="/library">라이브러리</a></li>
+          <li><a sec:authorize="isAuthenticated()" href="/member/charge">잔고 충전</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+</html>

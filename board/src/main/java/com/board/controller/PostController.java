@@ -44,7 +44,7 @@ public class PostController {
             return "post/write";
         }
 
-        return "redirect:/";
+        return "redirect:/post/list";
     }
 
     //게시글 수정페이지

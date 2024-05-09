@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  </head>
+  <main layout:fragment="content" class="main">
+    <!-- Latest news section -->
+    <div class="latest-news-section">
+      <div class="ln-title">Latest News</div>
+      <div class="news-ticker">
+        <div class="news-ticker-contant">
+          <div class="nt-item"><span class="new">new</span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </div>
+          <div class="nt-item"><span class="strategy">strategy</span>Isum dolor sit amet, consectetur adipiscing elit. </div>
+          <div class="nt-item"><span class="racing">racing</span>Isum dolor sit amet, consectetur adipiscing elit. </div>
+        </div>
+      </div>
+    </div>
+    <!-- Latest news section end -->
+    
+    
+    <!-- Page info section -->
+    <section class="page-info-section set-bg" th:data-setbg="${game.gameImgDtoList[0].imgUrl}">
+      <div class="pi-content">
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-5 col-lg-6 text-white">
+              <h2 th:text="${game.gameName}"></h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Page info section -->
+    
+    
+    <!-- Page section -->
+    <section class="page-section single-blog-page spad">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-2"></div>
+          <div class="col-lg-8">
+            <div th:each="gameImg : ${game.gameImgDtoList}">
+              <div class="blog-thumb set-bg" th:if="${not #strings.isEmpty(gameImg.imgUrl)}" th:data-setbg="${gameImg.imgUrl}">
+              </div>
+            </div>
+              <!-- 게임 번호를 hidden 필드로 전달 -->
+              <input type="hidden" id="gameId" name="gameId" th:value="${game.id}" />
+              <input type="hidden" id="price" name="price" th:value="${game.price}" />
+              <input type="hidden" id="memberId" name="memberId" th:value="${member.id}"/>
+              <input type="hidden" id="balance" th:value="${member.balance}"/>
+            <div class="blog-content">
+              <h3 th:text="${game.gameName}"></h3>
+              <p th:text="'출시일: ' + ${game.gameDate}"></p>
+              <p th:text="${game.gameDetail}"></p>
+              
+              <!-- 게임이 출시되었을 때만 구매 버튼 활성화 -->
+              <p th:if="${#strings.equals(game.gameRelease, 'RELEASE')}">
+                <!-- 사용자의 라이브러리에 있는 경우 -->
+              <div th:if="${member != null and #lists.contains(libraryGameIds, game.id)}">
+                <button class="btn btn-primary solid blank mt-3" disabled style="width:30%; background-color:black; color:white; border: 1px solid black;">
+                  이미 구매한 게임입니다
+                </button>
+              </div>
+              <!-- 사용자의 라이브러리에 없는 경우 -->
+              <div th:unless="${member != null and #lists.contains(libraryGameIds, game.id)}">
+                <button class="btn btn-primary solid blank mt-3" onclick="purchase()" type="submit" style="width:20%; background-color:black; color:white; border: 1px solid black;">
+                  [[${#numbers.formatInteger(game.price,0, 'COMMA')}]]원 구매하기
+                </button>
+              </div>
+              </p>
+              
+              <!-- 게임이 출시되지 않았을 때 -->
+              <p th:unless="${#strings.equals(game.gameRelease, 'RELEASE')}"> 해당 게임은 출시 예정인 게임입니다. 현재 구매가 가능하지 않습니다.</p>
+            </div>
+            <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN')" >
+              <a style="cursor:pointer;" th:href="'/game/modify/' + ${game.id}">수정</a>
+              <a style="cursor:pointer;" th:value="${game.id}"
+                 th:onclick="'deletePost(' + ${game.id} + ')'">삭제</a>
+            </th:block>
+          </div>
+          <div class="col-lg-2">
+          
+          </div>
+        
+        </div>
+      </div>
+    </section>
+  </main>
+  <th:block layout:fragment="script">
+    <script th:inline="javascript">
+      function deletePost(gameId) {
+        const deleteConf = confirm("등록된 게임을 삭제하시겠습니까?");
+        if(!deleteConf) return; //취소버튼 선택시
+        
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        
+        $.ajax({
+          url : "/game/delete/" + gameId,
+          type : "DELETE",
+          contentType : "application/json",
+          beforeSend : function(xhr) {
+            //데이터를 전송하기 전에 헤더에 csrf 값을 설정
+            xhr.setRequestHeader(header, token);
+          },
+          dataType : "json",
+          cache : false,
+          success : function(result, status) {
+            location.href = '/game';
+          },
+          error : function(jqXHR, status, error) {
+            if(jqXHR.status == '401') {
+              alert('로그인 후 이용해주세요.');
+              location.href = '/member/login';
+            } else {
+              alert(jqXHR.responseText);
+            }
+          }
+        });
+      }
+      
+      function purchase() {
+        //*헤더에 있는 토근 값을 가지고 온다.(반드시 같이 전송해야 한다.)
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        
+        //서버에 전달할 데이터
+        var paramData = {
+          gameId : $("#gameId").val(),
+          price : $("#price").val(),
+          memberId : $("#memberId").val()
+        }
+        var gameId = $("#gameId").val()
+        var balance = $("#balance").val()
+        var price = $("#price").val()
+        
+        //JSON -> 문자열 변경(ajax는 전달하는 데이터를 문자열로 만들어야한다)
+        var param = JSON.stringify(paramData);
+        
+        $.ajax({
+          url : "/purchase", //request URL
+          type : "POST", //전송방식
+          contentType : "application/json",
+          data : param, //서버에 전송할 데이터
+          beforeSend : function(xhr) {
+            //데이터를 전송하기전에 헤더에 csrf 값을 설정
+            xhr.setRequestHeader(header, token);
+          },
+          dataType : "json",
+          cache : false,
+              success: function(response) {
+                if (response === -1) {
+                  // 잔고 부족으로 인한 구매 실패
+                  if (confirm("잔고가 부족하여 구매를 실패하였습니다. 잔고 충전 페이지로 이동하시겠습니까?")) {
+                    // 사용자가 확인을 선택한 경우
+                    location.href = '/member/charge';
+                  } else {
+                    // 사용자가 취소를 선택한 경우
+                    // 추가 작업이 필요한 경우에 작성
+                  }
+                } else {
+                  // 구매가 성공한 경우
+                  alert("구매가 완료 되었습니다.");
+                  location.href = '/game/detail/' + gameId; // 성공 시 특정 URL로 이동
+                }
+              },
+          error : function(jqXHR, status, error) {
+            if (jqXHR.status == '401') {
+              alert('로그인 후 이용해주세요.');
+              location.href = '/members/login';
+            } else {
+              //에러메세지 출력(ResponseEntity에서 받아온 값을 출력해준다)
+              alert(jqXHR.responseText);
+            }
+          }
+        });
+        
+      }
+    </script>
+  </th:block>
+</html>
