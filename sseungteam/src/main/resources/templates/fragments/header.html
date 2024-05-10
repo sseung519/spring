@@ -6,8 +6,27 @@
     <div class="container" th:object="${member}">
       <!-- logo -->
       <a class="site-logo" href="/">
-        <img src="/img/logo.png" alt="로고">
+        <div class="frame">
+          <div class="clock">
+            <div class="time_box">
+              <span id="hours" class="large_text"></span>
+              <span class="colon">:</span>
+              <span id="minute" class="large_text"></span>
+              <span id="seconds" class="small_text"></span>
+            </div>
+            <div class="date_box">
+              <span id="year"></span>
+              <span>.</span>
+              <span id="month"></span>
+              <span>.</span>
+              <span id="date"></span>
+              <span id="day"></span>
+            </div>
+          </div>
+        </div>
+<!--        <img src="/img/logo.png" alt="로고">-->
       </a>
+      
       <div class="user-panel">
         <a sec:authorize="isAnonymous()" href="/member/login">로그인</a>
         <span sec:authorize="isAuthenticated()">
@@ -28,7 +47,6 @@
       <nav class="main-menu">
        
         <ul>
-          
           <li><a sec:authorize="hasAnyAuthority('ROLE_ADMIN')" style="color:deeppink" href="/game/new" >게임등록</a></li>
           <li><a href="/">홈</a></li>
           <li><a href="/game">게임</a></li>
@@ -36,6 +54,7 @@
           <li><a sec:authorize="isAuthenticated()" href="/member/charge">잔고 충전</a></li>
         </ul>
       </nav>
+      
     </div>
   </header>
 </html>

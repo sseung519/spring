@@ -39,7 +39,7 @@ public class LibraryService {
                     .orElseThrow(EntityExistsException::new);
 
             List<LibraryGame> libraryGameList = new ArrayList<>();
-            LibraryGame libraryGame = LibraryGame.createLibraryGame(game);
+            LibraryGame libraryGame = LibraryGame.createLibraryGame(game, member);
             libraryGameList.add(libraryGame);
 
             Library library = Library.createLibrary(member, libraryGameList);

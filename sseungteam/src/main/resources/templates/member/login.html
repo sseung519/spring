@@ -2,6 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout}">
+  <head>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  </head>
   <main layout:fragment="content" class="main">
     <section class="pt-5 padding-bottom">
       <div class="container">
@@ -38,7 +42,74 @@
             <div class="row justify-content-center">
               <div class="col-lg-5" style="text-align: center; padding-top:20px;">
                 <a href="/member/register">회원가입 하시겠습니까?</a>
+                <a data-toggle="modal" data-target="#forgotpw" style="color:blue; cursor: pointer;"
+                >비밀번호를 잊으셨나요?</a>
               </div>
+              
+              <!-- 퀴즈 입력 모달 -->
+              <div class="modal" id="forgotpw" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">비밀번호 재설정</h5>
+                      
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <span>회원가입 때 입력한 Quiz를 통해 비밀번호 재설정을 진행합니다.</span>
+                      <div class="form-group">
+                      <input class="form-control" name="email" id="findEmail"
+                             type="text" placeholder="이메일을 입력해주세요." maxlength="250" required>
+                      </div>
+                      <div class="form-group">
+                      <input class="form-control" name="quiz" id="quiz"
+                             type="text" placeholder="퀴즈: 당신의 생일은 언제인가요?" maxlength="8" required>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-primary" onclick="chkQuiz()">확인</button>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- 비밀번호 재설정 모달 -->
+              <div class="modal" id="resetPwModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">비밀번호 재설정</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <form id="resetPasswordForm">
+                      <div class="modal-body">
+                        <div class="form-group">
+                          <label for="resetPw">새로운 비밀번호</label>
+                          <input class="form-control" name="password" id="resetPw"
+                                 type="password" maxlength="250" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="resetPwChk">비밀번호 확인</label>
+                          <input class="form-control" name="password" id="resetPwChk"
+                                 type="password" maxlength="250" required>
+                        </div>
+                      </div>
+                    </form>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-primary" onclick="resetPassword()">비밀번호 재설정</button>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+              
+              
             </div>
           </div>
         </div>
@@ -72,6 +143,89 @@
           deleteCookie("setCookieYN");
         }
       });
+    
+      //이메일과 퀴즈체크
+      function chkQuiz() {
+        var email = $("#findEmail").val();
+        var quiz = $("#quiz").val();
+        
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        
+        var formData = {
+          email: email,
+          quiz: quiz
+        };
+        $.ajax({
+          url: "/member/chkquiz",
+          type: "POST",
+          contentType: "application/json",
+          beforeSend: function(xhr) {
+            xhr.setRequestHeader(header, token);
+          },
+          dataType: "json",
+          cache: false,
+          data: JSON.stringify(formData), // 데이터를 JSON 형식으로 전송
+          success: function(result, status, xhr) {
+            if(200<=xhr.status && 300<xhr.status) {
+              $("#forgotpw").modal("hide");
+              $("#resetPwModal").modal("show");
+            } else {
+              alert("에러가 발생하였습니다.")
+            }
+          },
+          error: function(jqXHR, status, error) {
+            if (jqXHR.responseText === "퀴즈 답변이 같지 않습니다.") {
+              alert('퀴즈 답변이 일치하지 않습니다.');
+              location.href = '/members/login';
+            } else {
+              $("#forgotpw").modal("hide");
+              $("#resetPwModal").modal("show");
+            }
+          }
+        });
+      }
+      
+      //비밀번호 재설정
+      function resetPassword() {
+        // 사용자가 입력한 아이디와 퀴즈 답변을 가져옴
+        var resetPw = $("#resetPw").val();
+        var resetPwChk = $("#resetPwChk").val();
+        var email = $("#findEmail").val();
+        
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        
+        // 폼 데이터 객체 생성
+        var formData = {
+          resetPw: resetPw,
+          resetPwChk: resetPwChk,
+          email: email
+        };
+        $.ajax({
+          url: "/member/resetpw",
+          type: "POST",
+          contentType: "application/json",
+          beforeSend: function(xhr) {
+            // 데이터를 전송하기 전에 헤더에 csrf 값을 설정
+            xhr.setRequestHeader(header, token);
+          },
+          dataType: "json",
+          cache: false,
+          data: JSON.stringify(formData), // 데이터를 JSON 형식으로 전송
+          success: function(result, status, xhr) {
+            $("#resetPwModal").modal("hide");
+            alert("비밀번호 변경 완료되었습니다.");
+            location.href = "/member/login"
+          },
+          error: function(jqXHR, status, error) {
+            $("#resetPwModal").modal("hide");
+            alert("비밀번호 변경 완료되었습니다.");
+            location.href = "/member/login"
+          }
+        });
+      }
+    
     
     </script>
   </th:block>

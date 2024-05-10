@@ -2,24 +2,30 @@ package com.sseungteam.controller;
 
 import com.sseungteam.dto.MemberFormDto;
 import com.sseungteam.entity.Member;
+import com.sseungteam.repository.MemberRepository;
 import com.sseungteam.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
     private final PasswordEncoder passwordEncoder;
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     //로그인
     @GetMapping(value = "/member/login")
@@ -84,4 +90,38 @@ public class MemberController {
         model.addAttribute("memberFormDto", new MemberFormDto());
         return "member/charge";
     }
+
+    //퀴즈 체크
+    @PostMapping(value="/member/chkquiz")
+    public ResponseEntity<String> chkQuiz(@RequestBody Map<String, String> requestData) throws Exception {
+        String email = requestData.get("email");
+        String quiz = requestData.get("quiz");
+
+        boolean chkQuiz = memberService.chkQuiz(email, quiz);
+
+        if(chkQuiz) {
+            return new ResponseEntity<String>(email, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<String>("퀴즈 답변이 같지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value="/member/resetpw")
+    public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> requestData) {
+        String resetPw = requestData.get("resetPw");
+        String resetPwChk = requestData.get("resetPwChk");
+        String email = requestData.get("email");
+
+        boolean comparePw = resetPw.equals(resetPwChk);
+
+        if(comparePw) {
+            Member member = memberRepository.findByEmail(email);
+            member.newPassword(member, resetPw, passwordEncoder);
+            memberRepository.save(member);
+            return new ResponseEntity<String>(email, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<String>("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

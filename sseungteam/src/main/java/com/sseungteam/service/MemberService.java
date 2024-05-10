@@ -43,6 +43,17 @@ public class MemberService implements UserDetailsService {
             throw new IllegalStateException("이미 가입된 이메일 입니다.");
         }
     }
+
+    //퀴즈로 일치확인
+    public boolean chkQuiz(String email, String quiz) throws Exception {
+        Member member = memberRepository.findByEmail(email);
+        if(member == null) {
+            throw new Exception("가입되지 않은 이메일입니다. 확인 후 다시 입력해주세요.");
+        }
+        //boolean으로 true false값 전달
+        return member.getQuiz().equals(quiz);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         //해당 email 계정을 가진 사용자가 있는지 확인

@@ -24,13 +24,17 @@ public class LibraryGame extends BaseEntity{
     @JoinColumn(name="library_id")
     private Library library;
 
-    public static LibraryGame createLibraryGame(Game game) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_id")
+    private Member member;
+
+    public static LibraryGame createLibraryGame(Game game, Member member) {
         LibraryGame libraryGame = new LibraryGame();
         libraryGame.setGame(game);
+        libraryGame.setMember(member);
 
         return libraryGame;
     }
-
 
 
 }

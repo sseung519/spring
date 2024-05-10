@@ -20,7 +20,7 @@
                 <form action="/member/new" method="post"
                       th:object="${memberFormDto}" id="contact-form" class="contact-form">
                   <h3 class="mb-4 text-center">회원가입</h3>
-                  <p style="text-align: center">회원가입 이벤트 진행중 회원가입 시, 10,000원 지원</p>
+                  <p class="blink" style="text-align: center; color: deeppink">회원가입 이벤트 진행중 회원가입 시, 10,000원 지원</p>
                   <div class="row">
                     <div class="col-md-12">
                       
@@ -47,9 +47,9 @@
                       
                       <div class="form-group">
                         <label th:for="quiz"></label>
-                        <p>당신의 생일은 언제인가요? ex)19950519</p>
+                        <p>당신의 생일은 언제인가요? ex)19950519, 비밀번호 재설정 시, 필요합니다.</p>
                         <input class="form-control" th:field="*{quiz}"
-                               type="text" placeholder="질문에 대한 답변을 적어주세요." maxlength="250" required>
+                               type="text" placeholder="질문에 대한 답변을 적어주세요." maxlength="8" required>
                         <p class="fieldError" th:if="${#fields.hasErrors('quiz')}" th:errors="*{quiz}">Incorrect Data</p>
                       </div>
                       

@@ -9,9 +9,11 @@
       <div class="ln-title">Latest News</div>
       <div class="news-ticker">
         <div class="news-ticker-contant">
-          <div class="nt-item"><span class="new">new</span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </div>
-          <div class="nt-item"><span class="strategy">strategy</span>Isum dolor sit amet, consectetur adipiscing elit. </div>
-          <div class="nt-item"><span class="racing">racing</span>Isum dolor sit amet, consectetur adipiscing elit. </div>
+          <div class="nt-item"><span class="new">new</span>HELLDIVERS 2 </div>
+          <div class="nt-item"><span class="new">new</span>Palworld </div>
+          <div class="nt-item"><span class="strategy">battleroyale</span>APEX LEGENDS </div>
+          <div class="nt-item"><span class="strategy">battleroyale</span>PUBG: BATTLEGROUNDS </div>
+          <div class="nt-item"><span class="racing">sports</span>EA SPORTS FC™ 24 </div>
         </div>
       </div>
     </div>
@@ -19,7 +21,7 @@
     
     
     <!-- Page info section -->
-    <section class="page-info-section set-bg" data-setbg="img/page-top-bg/3.jpg">
+    <section class="page-info-section set-bg" data-setbg="/img/page-top-bg/3.jpg">
       <div class="pi-content">
         <div class="container">
           <div class="row">
@@ -53,8 +55,11 @@
                     <h5>
                       <a th:href="'/game/detail/'+${game.id}">[[${game.gameName}]]</a>
                     </h5>
-                    <h6 style="color:black">
+                    <h6 th:if="${game.price} != 0" style="color:black">
                       [[${#numbers.formatInteger(game.price,0, 'COMMA')}]]원
+                    </h6>
+                    <h6 class="blink" th:unless="${game.price} != 0" style="color:black">
+                      무료
                     </h6>
                   </div>
                 </a>

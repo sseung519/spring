@@ -49,4 +49,9 @@ public class Member {
         return member;
     }
 
+    public static void newPassword(Member member, String password, PasswordEncoder passwordEncoder) {
+        String newPassword = passwordEncoder.encode(password);
+        member.setPassword(newPassword);
+    }
+
 }

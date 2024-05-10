@@ -67,11 +67,14 @@
               </div>
               <!-- 사용자의 라이브러리에 없는 경우 -->
               <div th:unless="${member != null and #lists.contains(libraryGameIds, game.id)}">
-                <button class="btn btn-primary solid blank mt-3" onclick="purchase()" type="submit" style="width:20%; background-color:black; color:white; border: 1px solid black;">
+                <button th:if="${game.price} !=0" class="btn btn-primary solid blank mt-3" onclick="purchase()" type="submit" style="width:20%; background-color:black; color:white; border: 1px solid black;">
                   [[${#numbers.formatInteger(game.price,0, 'COMMA')}]]원 구매하기
                 </button>
+                <button th:unless="${game.price} !=0" class="btn btn-primary solid blank mt-3" onclick="purchase()" type="submit" style="width:20%; background-color:black; color:white; border: 1px solid black;">
+                  무료로 구매하기
+                </button>
               </div>
-              </p>
+             
               
               <!-- 게임이 출시되지 않았을 때 -->
               <p th:unless="${#strings.equals(game.gameRelease, 'RELEASE')}"> 해당 게임은 출시 예정인 게임입니다. 현재 구매가 가능하지 않습니다.</p>
@@ -158,9 +161,6 @@
                   if (confirm("잔고가 부족하여 구매를 실패하였습니다. 잔고 충전 페이지로 이동하시겠습니까?")) {
                     // 사용자가 확인을 선택한 경우
                     location.href = '/member/charge';
-                  } else {
-                    // 사용자가 취소를 선택한 경우
-                    // 추가 작업이 필요한 경우에 작성
                   }
                 } else {
                   // 구매가 성공한 경우
