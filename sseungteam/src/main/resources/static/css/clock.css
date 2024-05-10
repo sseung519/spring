@@ -1,0 +1,39 @@
+.frame {
+    display: inline-block;
+
+    padding: 8px;
+
+    border-radius: 8px;
+    background-color: #000000;
+}
+
+.clock {
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.large_text {
+    font-size: 40px;
+}
+
+.small_text {
+    font-size: 10px;
+}
+
+.date_box {
+    font-size: 10px;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0.0;
+    }
+}
+
+.colon {
+    font-size: 30px;
+    vertical-align: text-bottom;
+    animation: blink 1s step-start 0s infinite;
+}
