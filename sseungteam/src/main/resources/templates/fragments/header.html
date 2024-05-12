@@ -6,6 +6,7 @@
     <div class="container" th:object="${member}">
       <!-- logo -->
       <a class="site-logo" href="/">
+        <!-- 시계 -->
         <div class="frame">
           <div class="clock">
             <div class="time_box">
@@ -31,14 +32,13 @@
         <a sec:authorize="isAnonymous()" href="/member/login">로그인</a>
         <span sec:authorize="isAuthenticated()">
                     <a href="/" th:if="${member.name != null}" th:text="${member.name} + '님'"></a>
-                    <a href="/member/logout" style="color:white;">로그아웃</a>
+                    <a href="/member/logout" style="color:black; text-decoration: underline">로그아웃</a>
                 </span>
-      </div>
-      <div class="user-panel" sec:authorize="isAuthenticated()">
-        <span th:if="${member.name != null}">
+        <span sec:authorize="isAuthenticated()" th:if="${member.name != null}">
          잔고: [[${#numbers.formatInteger(member.balance,0, 'COMMA')}]]원
         </span>
       </div>
+
       <!-- responsive -->
       <div class="nav-switch">
         <i class="fa fa-bars"></i>

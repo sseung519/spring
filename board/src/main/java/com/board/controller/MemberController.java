@@ -41,8 +41,8 @@ public class MemberController {
     @PostMapping(value = "/members/new")
     public String memberForm(@Valid MemberFormDto memberFormDto,
                              BindingResult bindingResult, Model model) {
-        //@Valid: 유혀성을 검증하려는 객체 앞에 붙인다.
-        //BindingResult: 유혀성 검증 후의 결과가 들어있다.
+        //@Valid: 유효성을 검증하려는 객체 앞에 붙인다.
+        //BindingResult: 유효성 검증 후의 결과가 들어있다.
 
         //유효성 검증 에러 발생 시, 회원가입 페이지로 이동시킴.
         if(bindingResult.hasErrors()) return "member/memberForm";
